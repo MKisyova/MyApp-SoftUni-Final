@@ -26,6 +26,18 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Book> Books { get; set; }
+
+        public DbSet<Author> Authors { get; set; }
+
+        public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<BookGenre> BookGenres { get; set; }
+
+        public DbSet<AuthorGenre> AuthorGenres { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
