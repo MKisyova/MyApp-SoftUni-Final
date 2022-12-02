@@ -2,15 +2,31 @@
 {
     using System.Diagnostics;
 
+    using BookstoreApp.Services.Data;
     using BookstoreApp.Web.ViewModels;
-
+    using BookstoreApp.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        private readonly IGetCountsService countsService;
+
+        public HomeController(IGetCountsService countsService)
+        {
+            this.countsService = countsService;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var counts = this.countsService.GetCounts();
+            var viewModel = new IndexViewModel
+            {
+                BooksCount = counts.BooksCount,
+                AuthorsCount = counts.AuthorsCount,
+                GenresCount = counts.GenresCount,
+            };
+
+            return this.View(viewModel);
         }
 
         public IActionResult Privacy()
