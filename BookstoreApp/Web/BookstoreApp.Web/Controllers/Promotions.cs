@@ -2,9 +2,9 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    public class CategoriesController : BaseController
+    public class Promotions : BaseController
     {
-        public IActionResult All()
+        public IActionResult SpecialOffers()
         {
             return this.View();
         }
