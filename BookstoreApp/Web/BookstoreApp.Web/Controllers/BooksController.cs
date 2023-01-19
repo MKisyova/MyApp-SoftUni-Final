@@ -13,5 +13,10 @@
         {
             return this.View();
         }
+
+        public IActionResult All()
+        {
+            return this.View();
+        }
     }
 }
