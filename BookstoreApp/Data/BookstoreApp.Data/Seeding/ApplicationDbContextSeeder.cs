@@ -28,6 +28,8 @@
                               new RolesSeeder(),
                               new SettingsSeeder(),
                               new GenresSeeder(),
+                              new AuthorsSeeder(),
+                              new BooksSeeder(),
                           };
 
             foreach (var seeder in seeders)
