@@ -1,6 +1,7 @@
 ﻿namespace BookstoreApp.Data.Seeding
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using BookstoreApp.Data.Models;
 
@@ -8,6 +9,11 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
+            if (dbContext.Authors.Any())
+            {
+                return;
+            }
+
             await dbContext.Authors.AddAsync(new Author
             {
                 FirstName = "Agatha",
