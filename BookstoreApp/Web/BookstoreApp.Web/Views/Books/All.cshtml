@@ -1,20 +1,22 @@
-﻿@{
+﻿@model BookstoreApp.Web.ViewModels.Books.AllBooksListViewModel
+@{
     this.ViewData["Title"] = "All books";
 }
 
 <h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
-@for (var i = 0; i < 12; i++)
-{
-    <div class="media col-md-3">
-         <img src="..." class="mr-3" alt="...">
+
+  @foreach (var book in this.Model.Books)
+   {
+    <div class="media col-md-4">
+         <img src="@book.ImageUrl" width="100" class="mr-3 img-responsive">
         <div class="media-body">
-            <h5 class="mt-0">Media heading</h5>
-            This is some content from a media component. You can replace this with any content and adjust it as needed.
+            <h5 class="mt-0">@book.Title</h5>
+            @book.Description
         </div>
     </div>
-}  
+   }  
 </div>
 <hr />
 <nav aria-label="...">
