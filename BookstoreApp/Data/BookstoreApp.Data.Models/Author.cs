@@ -12,9 +12,7 @@
             this.Genres = new HashSet<AuthorGenre>();
         }
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        public string Name { get; set; }
 
         public string ShortBiography { get; set; }
 

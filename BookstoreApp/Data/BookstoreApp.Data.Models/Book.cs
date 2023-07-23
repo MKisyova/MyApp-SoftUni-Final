@@ -22,7 +22,7 @@
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
 
-        public int YearPublished { get; set; }
+        public short YearPublished { get; set; }
 
         public int AuthorId { get; set; }
 

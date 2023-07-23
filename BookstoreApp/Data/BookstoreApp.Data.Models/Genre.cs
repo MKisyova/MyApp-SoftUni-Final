@@ -4,7 +4,7 @@
 
     using BookstoreApp.Data.Common.Models;
 
-    public class Genre : BaseModel<int>
+    public class Genre : BaseDeletableModel<int>
     {
         public Genre()
         {

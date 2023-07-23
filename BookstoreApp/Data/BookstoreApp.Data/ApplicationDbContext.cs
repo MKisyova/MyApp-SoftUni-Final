@@ -34,6 +34,8 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<Bestseller> Bestsellers { get; set; }
+
         public DbSet<BookGenre> BookGenres { get; set; }
 
         public DbSet<AuthorGenre> AuthorGenres { get; set; }
