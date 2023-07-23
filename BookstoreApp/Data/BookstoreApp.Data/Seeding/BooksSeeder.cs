@@ -22,7 +22,7 @@
                 Pages = 272,
                 Price = 14.99M,
                 YearPublished = 1939,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -32,7 +32,7 @@
                 Pages = 288,
                 Price = 15.29M,
                 YearPublished = 1937,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -42,7 +42,7 @@
                 Pages = 256,
                 Price = 14.99M,
                 YearPublished = 1934,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -52,7 +52,7 @@
                 Pages = 312,
                 Price = 14.99M,
                 YearPublished = 1926,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -62,7 +62,7 @@
                 Pages = 296,
                 Price = 10.00M,
                 YearPublished = 1920,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -72,7 +72,7 @@
                 Pages = 288,
                 Price = 15.49M,
                 YearPublished = 1936,
-                AuthorId = 21,
+                AuthorId = 1,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -82,7 +82,7 @@
                 Pages = 672,
                 Price = 9.99M,
                 YearPublished = 1989,
-                AuthorId = 22,
+                AuthorId = 2,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -92,7 +92,7 @@
                 Pages = 544,
                 Price = 9.99M,
                 YearPublished = 1991,
-                AuthorId = 22,
+                AuthorId = 2,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -102,7 +102,7 @@
                 Pages = 387,
                 Price = 9.99M,
                 YearPublished = 1993,
-                AuthorId = 22,
+                AuthorId = 2,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -112,7 +112,7 @@
                 Pages = 223,
                 Price = 8.99M,
                 YearPublished = 1997,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -122,7 +122,7 @@
                 Pages = 251,
                 Price = 8.99M,
                 YearPublished = 1998,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -132,7 +132,7 @@
                 Pages = 317,
                 Price = 9.89M,
                 YearPublished = 1999,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -142,7 +142,7 @@
                 Pages = 636,
                 Price = 11.69M,
                 YearPublished = 2000,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -152,7 +152,7 @@
                 Pages = 766,
                 Price = 10.99M,
                 YearPublished = 2003,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -162,7 +162,7 @@
                 Pages = 607,
                 Price = 12.99M,
                 YearPublished = 2005,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -172,7 +172,7 @@
                 Pages = 607,
                 Price = 13.99M,
                 YearPublished = 2007,
-                AuthorId = 23,
+                AuthorId = 3,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -182,7 +182,7 @@
                 Pages = 1216,
                 Price = 59.99M,
                 YearPublished = 1954,
-                AuthorId = 24,
+                AuthorId = 4,
             });
 
             await dbContext.Books.AddAsync(new Book
@@ -192,7 +192,7 @@
                 Pages = 310,
                 Price = 15.49M,
                 YearPublished = 1937,
-                AuthorId = 24,
+                AuthorId = 4,
             });
 
             await dbContext.SaveChangesAsync();
