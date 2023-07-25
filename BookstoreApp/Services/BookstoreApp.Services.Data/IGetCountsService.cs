@@ -1,9 +1,9 @@
-﻿using BookstoreApp.Services.Data.Models;
-
-namespace BookstoreApp.Services.Data
+﻿namespace BookstoreApp.Services.Data
 {
+    using BookstoreApp.Web.ViewModels.Home;
+
     public interface IGetCountsService
     {
-        CountsDto GetCounts();
+        IndexViewModel GetCounts();
     }
 }

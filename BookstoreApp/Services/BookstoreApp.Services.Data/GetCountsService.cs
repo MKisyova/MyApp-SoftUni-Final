@@ -4,7 +4,7 @@
 
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
-    using BookstoreApp.Services.Data.Models;
+    using BookstoreApp.Web.ViewModels.Home;
 
     public class GetCountsService : IGetCountsService
     {
@@ -22,9 +22,9 @@
             this.genresRepository = genresRepository;
         }
 
-        public CountsDto GetCounts()
+        public IndexViewModel GetCounts()
         {
-            var data = new CountsDto
+            var data = new IndexViewModel
             {
                 BooksCount = this.booksRepository.All().Count(),
                 AuthorsCount = this.authorsRepository.All().Count(),
