@@ -57,8 +57,6 @@
 
             services.AddSingleton(configuration);
 
-            services.AddMemoryCache();
-
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -69,6 +67,8 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<IBooksService, BooksService>();
+            services.AddTransient<IAuthorsService, AuthorsService>();
+            services.AddTransient<IGenresService, GenresService>();
         }
 
         private static void Configure(WebApplication app)

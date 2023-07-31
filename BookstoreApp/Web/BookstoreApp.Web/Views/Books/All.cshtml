@@ -1,23 +1,52 @@
 ﻿@model BookstoreApp.Web.ViewModels.Books.AllBooksListViewModel
 @{
-    this.ViewData["Title"] = "All books";
+	this.ViewData["Title"] = "All books";
 }
 
+@* <style>
+    /* Custom CSS to set max-width for .img-fluid */
+    .img-fluid {
+      max-width: 80%;
+    }
+  </style>
+*@
 <h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
 
-  @foreach (var book in this.Model.Books)
-   {
-    <div class="media col-md-4">
-         <img src="@book.ImageUrl" width="100" class="mr-3 img-responsive">
-        <div class="media-body">
-            <h5 class="mt-0">@book.Title</h5>
-            @book.Description
-        </div>
-    </div>
-   }  
+	@*  @foreach (var book in this.Model.Books)
+	{
+	<div class="media col-md-4">
+	<img src="@book.ImageId" width="100" class="mr-3 img-responsive">
+	<div class="media-body">
+	<h5 class="mt-0">@book.Title</h5>
+	@book.AuthorName
+	</div>
+	</div>
+	}*@
+
+	@foreach (var book in this.Model.Books)
+	{
+		<div class="col-md-2">
+			<div class="card mb-4">
+				@*            <img src="..." class="card-img-top" alt="...">*@
+				@*            <img src="@book.ImageId" class="image-fluid mx-auto d-block" width="150">*@
+				@*                <img src="@book.ImageId" class="img-fluid mx-auto d-block">*@
+				<a asp-action="ById" asp-route-id="@book.Id">
+					<img src="@book.ImageId" class="img-fluid rounded-2 fit">
+				</a>
+				<div class="card-body">
+					<h5 class="card-title">@book.Title</h5>
+					<h6 class="card-subtitle mb-2 text-muted">@book.AuthorName</h6>
+					<h6 class="card-subtitle mb-2 text-danger">@book.Price €</h6>
+					<a href="#" class="btn btn-primary">By book</a>
+				</div>
+			</div>
+		</div>
+	}
+
 </div>
 <hr />
 <partial name="_PagingPartial" model="@Model" />
+
 
