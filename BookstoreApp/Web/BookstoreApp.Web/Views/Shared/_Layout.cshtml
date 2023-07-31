@@ -6,13 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/mdb.min.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
-	<link rel="stylesheet" href="~/css/lazy.css">
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-light bg-success border-bottom box-shadow mb-1">
+		<nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-1 cadet-blue-color">
 			<div class="container">
 				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -21,6 +21,45 @@
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
+
+						@*if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Administrator"))
+						{*@
+						<li class="nav-item dropdown">
+							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-book-open"></i> Books settings</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Books" asp-action="Create">Create book</a>
+								</li>
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Books" asp-action="Edit">Edit book</a>
+								</li>
+							</ul>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-secret"></i> Authors settings</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Authors" asp-action="Create">Create author</a>
+								</li>
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Authors" asp-action="Edit">Edit author</a>
+								</li>
+							</ul>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-bookmark"></i> Genres settings</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Genres" asp-action="Create">Create genre</a>
+								</li>
+								<li>
+									<a class="dropdown-item text-dark" asp-area="" asp-controller="Genres" asp-action="Edit">Edit genre</a>
+								</li>
+							</ul>
+						</li>
+
 						@*                        <li class="nav-item">
 						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 						</li>*@
@@ -51,12 +90,6 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="All">Books</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="EBooks" asp-action="All">eBooks</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="AudioBooks" asp-action="All">Audio Books</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Bestsellers">Bestsellers</a>
@@ -96,9 +129,7 @@
 	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-	<script src="~/lib/popper/popper.min.js"></script>
 	<script src="~/js/site.min.js" asp-append-version="true"></script>
-	<script src="~/js/lazy.js" asp-append-version="true"></script>
 	@await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
