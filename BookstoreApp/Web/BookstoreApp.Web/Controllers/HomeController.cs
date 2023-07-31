@@ -6,17 +6,14 @@
     using BookstoreApp.Web.ViewModels;
     using BookstoreApp.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Caching.Memory;
 
     public class HomeController : BaseController
     {
         private readonly IGetCountsService countsService;
-        private readonly IMemoryCache memoryCache;
 
-        public HomeController(IGetCountsService countsService, IMemoryCache memoryCache)
+        public HomeController(IGetCountsService countsService)
         {
             this.countsService = countsService;
-            this.memoryCache = memoryCache;
         }
 
         public IActionResult Index()
