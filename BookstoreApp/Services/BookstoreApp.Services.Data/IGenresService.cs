@@ -7,6 +7,10 @@
 
     public interface IGenresService
     {
+        IEnumerable<T> GetAll<T>();
+
+        T GetById<T>(int id);
+
         Task CreateAsync(CreateGenreInputModel input);
 
         IEnumerable<KeyValuePair<string, string>> GetAllGenresAsKeyValuePair();

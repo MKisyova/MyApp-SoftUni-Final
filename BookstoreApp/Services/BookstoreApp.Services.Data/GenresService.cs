@@ -7,6 +7,7 @@
 
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
+    using BookstoreApp.Services.Mapping;
     using BookstoreApp.Web.ViewModels.Genres;
 
     public class GenresService : IGenresService
@@ -16,6 +17,25 @@
         public GenresService(IDeletableEntityRepository<Genre> genresRepository)
         {
             this.genresRepository = genresRepository;
+        }
+
+        public IEnumerable<T> GetAll<T>()
+        {
+            var genres = this.genresRepository.AllAsNoTracking()
+                .OrderBy(x => x.Name)
+                .To<T>()
+                .ToList();
+
+            return genres;
+        }
+
+        public T GetById<T>(int id)
+        {
+            var genre = this.genresRepository.AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .To<T>().FirstOrDefault();
+
+            return genre;
         }
 
         public async Task CreateAsync(CreateGenreInputModel input)

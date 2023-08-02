@@ -15,6 +15,22 @@
             this.genresService = genresService;
         }
 
+        public IActionResult All()
+        {
+            var viewModel = new AllGenresViewModel
+            {
+                Genres = this.genresService.GetAll<SingleGenreViewModel>(),
+            };
+
+            return this.View(viewModel);
+        }
+
+        public IActionResult ById(int id)
+        {
+            var book = this.genresService.GetById<SingleGenreViewModel>(id);
+            return this.View(book);
+        }
+
         public IActionResult Create()
         {
             var model = new CreateGenreInputModel();
