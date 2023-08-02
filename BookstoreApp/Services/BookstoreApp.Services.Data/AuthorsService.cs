@@ -52,15 +52,6 @@
                 }
             }
 
-            //if (input.BookIds != null)
-            //{
-            //    foreach (var inputBookId in input.BookIds)
-            //    {
-            //        var book = this.booksRepository.All().FirstOrDefault(x => x.Id == inputBookId);
-            //        author.Books.Add(book);
-            //    }
-            //}
-
             await this.authorsRepository.AddAsync(author);
             await this.authorsRepository.SaveChangesAsync();
         }

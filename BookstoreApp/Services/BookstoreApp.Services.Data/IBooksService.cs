@@ -7,7 +7,9 @@
 
     public interface IBooksService
     {
-        IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 6);
+        IEnumerable<T> GetAll<T>(int page, int itemsPerPage);
+
+        IEnumerable<T> GetAllNewBooks<T>(int page, int itemsPerPage);
 
         int GetCount();
 

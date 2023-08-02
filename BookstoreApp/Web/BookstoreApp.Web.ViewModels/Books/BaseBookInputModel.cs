@@ -6,7 +6,7 @@
 
     using Microsoft.AspNetCore.Http;
 
-    public class BaseBookInputModel
+    public abstract class BaseBookInputModel
     {
         [Required]
         public string Title { get; set; }
@@ -28,11 +28,14 @@
         [Display(Name = "Author")]
         public int AuthorId { get; set; }
 
-        // [Display(Name = "Upload cover image")]
-        // public string ImageId { get; set; }
         public IEnumerable<KeyValuePair<string, string>> Authors { get; set; }
 
         [Display(Name = "Genres")]
         public IEnumerable<int> GenreIds { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> Genres { get; set; }
+
+        [Display(Name = "Upload cover image")]
+        public IFormFile Image { get; set; }
     }
 }

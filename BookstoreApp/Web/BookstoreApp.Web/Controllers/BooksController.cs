@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
+    using BookstoreApp.Common;
     using BookstoreApp.Services.Data;
     using BookstoreApp.Web.ViewModels.Books;
     using Microsoft.AspNetCore.Hosting;
@@ -12,15 +13,18 @@
     {
         private readonly IBooksService booksService;
         private readonly IAuthorsService authorsService;
+        private readonly IGenresService genresService;
         private readonly IWebHostEnvironment environment;
 
         public BooksController(
             IBooksService booksService,
             IAuthorsService authorsService,
+            IGenresService genresService,
             IWebHostEnvironment environment)
         {
             this.booksService = booksService;
             this.authorsService = authorsService;
+            this.genresService = genresService;
             this.environment = environment;
         }
 
@@ -29,22 +33,29 @@
             return this.View();
         }
 
-        public IActionResult NewBooks()
+        public IActionResult NewBooks(int pageNumber = 1)
         {
-            return this.View();
+            var viewModel = new AllBooksListViewModel
+            {
+                ItemsPerPage = GlobalConstants.ItemsPerPage,
+                PageNumber = pageNumber,
+                TotalItemsCount = this.booksService.GetCount(),
+                Books = this.booksService.GetAllNewBooks<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
+            };
+
+            return this.View(nameof(this.All), viewModel);
         }
 
         // Books/All/1,2,3 page
-        public IActionResult All(int id = 1)
+        public IActionResult All(int pageNumber = 1)
         {
-            const int ItemsPerPage = 12;
-
+            // const int ItemsPerPage = 12;
             var viewModel = new AllBooksListViewModel
             {
-                ItemsPerPage = ItemsPerPage,
-                PageNumber = id,
+                ItemsPerPage = GlobalConstants.ItemsPerPage,
+                PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCount(),
-                Books = this.booksService.GetAll<AllBooksViewModel>(id, ItemsPerPage),
+                Books = this.booksService.GetAll<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);
@@ -60,6 +71,7 @@
         {
             var model = new CreateBookInputModel();
             model.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+            model.Genres = this.genresService.GetAllGenresAsKeyValuePair();
 
             return this.View(model);
         }
@@ -70,6 +82,7 @@
             if (!this.ModelState.IsValid)
             {
                 input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -81,6 +94,7 @@
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
                 input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
                 return this.View(input);
             }
 

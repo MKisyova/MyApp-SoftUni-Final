@@ -70,7 +70,18 @@
             await this.booksRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 6)
+        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .OrderBy(x => Guid.NewGuid())
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetAllNewBooks<T>(int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
                 .OrderByDescending(x => x.Id)
