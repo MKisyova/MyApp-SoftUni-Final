@@ -5,7 +5,7 @@
 
     public class AllBooksListViewModel : PagingViewModel
     {
-        public IEnumerable<AllBooksViewModel> Books { get; set; }
+        public IEnumerable<SmallBookViewModel> Books { get; set; }
 
     }
 }

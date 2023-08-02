@@ -5,5 +5,7 @@
         public const string SystemName = "BookstoreApp";
 
         public const string AdministratorRoleName = "Administrator";
+
+        public const int ItemsPerPage = 12;
     }
 }
