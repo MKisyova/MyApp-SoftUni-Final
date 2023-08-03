@@ -1,0 +1,15 @@
+﻿@model BookstoreApp.Web.ViewModels.Books.SmallBookViewModel
+
+<div class="col-md-2">
+	<div class="card mb-4">
+		<a asp-controller="Books" asp-action="ById" asp-route-id="@Model.Id">
+			<img src="@Model.ImageId" class="img-fluid rounded-2 fit">
+		</a>
+		<div class="card-body">
+			<h5 class="card-title">@Model.Title</h5>
+			<h6 class="card-subtitle mb-2 text-muted">@Model.AuthorName</h6>
+			<h6 class="card-subtitle mb-2 text-danger">@Model.Price €</h6>
+			<a href="#" class="btn btn-primary">By book</a>
+		</div>
+	</div>
+</div>

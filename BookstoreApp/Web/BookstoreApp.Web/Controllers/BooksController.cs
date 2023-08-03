@@ -43,7 +43,7 @@
                 Books = this.booksService.GetAllNewBooks<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
-            return this.View(nameof(this.All), viewModel);
+            return this.View(viewModel);
         }
 
         // Books/All/1,2,3 page
