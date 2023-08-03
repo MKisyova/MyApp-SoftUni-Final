@@ -92,6 +92,17 @@
             return books;
         }
 
+        public IEnumerable<T> GetBookForHomePage<T>(int booksCount)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .OrderBy(x => Guid.NewGuid())
+                .Take(booksCount)
+                .To<T>()
+                .ToList();
+
+            return books;
+        }
+
         public int GetCount()
         {
             return this.booksRepository.All().Count();
@@ -114,6 +125,15 @@
                 .To<T>().FirstOrDefault();
 
             return book;
+        }
+
+        public IEnumerable<T> GetByGenreId<T>(int genreId)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.GenreId == genreId))
+                .To<T>().ToList();
+
+            return books;
         }
     }
 }

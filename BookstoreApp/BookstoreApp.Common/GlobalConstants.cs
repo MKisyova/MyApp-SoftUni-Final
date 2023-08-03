@@ -7,5 +7,7 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const int ItemsPerPage = 12;
+
+        public const int BooksForHomePageCount = 12;
     }
 }

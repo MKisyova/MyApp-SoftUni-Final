@@ -1,18 +1,24 @@
 ﻿namespace BookstoreApp.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
-
+    using BookstoreApp.Common;
     using BookstoreApp.Services.Data;
+    using BookstoreApp.Web.ViewModels.Books;
     using BookstoreApp.Web.ViewModels.Genres;
     using Microsoft.AspNetCore.Mvc;
 
     public class GenresController : BaseController
     {
         private readonly IGenresService genresService;
+        private readonly IBooksService booksService;
 
-        public GenresController(IGenresService genresService)
+        public GenresController(
+            IGenresService genresService,
+            IBooksService booksService)
         {
             this.genresService = genresService;
+            this.booksService = booksService;
         }
 
         public IActionResult All()
@@ -25,10 +31,24 @@
             return this.View(viewModel);
         }
 
-        public IActionResult ById(int id)
+        //public IActionResult ById(int id)
+        //{
+        //    var genre = this.genresService.GetById<BooksByGenreViewModel>(id);
+        //    return this.View(genre);
+        //}
+
+        public IActionResult BooksByGenreId(int id, int pageNumber = 1)
         {
-            var book = this.genresService.GetById<SingleGenreViewModel>(id);
-            return this.View(book);
+            var viewModel = new BooksByGenreViewModel
+            {
+                ItemsPerPage = GlobalConstants.ItemsPerPage,
+                PageNumber = pageNumber,
+                TotalItemsCount = this.booksService.GetByGenreId<SmallBookViewModel>(id).Count(),
+                Genre = this.genresService.GetById<SingleGenreViewModel>(id),
+                Books = this.booksService.GetByGenreId<SmallBookViewModel>(id),
+            };
+
+            return this.View(viewModel);
         }
 
         public IActionResult Create()
