@@ -4,6 +4,20 @@
 }
 
 <h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<div class="col-lg-6 col-md-12 col-12">
+	<div class="input-group float-center">
+		<div class="form-outline">
+@*			<input type="search" id="form1" class="form-control">*@
+			<input asp-for="Keyword" type="search" id="form1" class="form-control">
+			<label asp-for="Keyword" class="form-label" for="form1" style="margin-left: 0px;">Search for a book</label>
+			<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 47.2px;"></div><div class="form-notch-trailing"></div></div>
+		</div>
+		<button type="button" class="btn btn-primary shadow-0" style="">
+			<i class="fas fa-search"></i>
+		</button>
+		@*<a asp-controller="Books" asp-action="ById"></a>*@
+	</div>
+</div>
 <hr />
 <div class="row">
 	@foreach (var book in this.Model.Books)
