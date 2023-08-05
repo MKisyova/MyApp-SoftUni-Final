@@ -4,6 +4,7 @@ using BookstoreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookstoreApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805073351_IsFictionToGenres")]
+    partial class IsFictionToGenres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,7 +200,7 @@ namespace BookstoreApp.Data.Migrations
                     b.ToTable("AuthorGenres");
                 });
 
-            modelBuilder.Entity("BookstoreApp.Data.Models.BestsellingBook", b =>
+            modelBuilder.Entity("BookstoreApp.Data.Models.Bestseller", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,7 +208,7 @@ namespace BookstoreApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("BookId")
+                    b.Property<int?>("BookId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -226,12 +228,11 @@ namespace BookstoreApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId")
-                        .IsUnique();
+                    b.HasIndex("BookId");
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("BestsellingBooks");
+                    b.ToTable("Bestsellers");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Book", b =>
@@ -561,13 +562,11 @@ namespace BookstoreApp.Data.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("BookstoreApp.Data.Models.BestsellingBook", b =>
+            modelBuilder.Entity("BookstoreApp.Data.Models.Bestseller", b =>
                 {
                     b.HasOne("BookstoreApp.Data.Models.Book", "Book")
-                        .WithOne("BestsellingBook")
-                        .HasForeignKey("BookstoreApp.Data.Models.BestsellingBook", "BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("BookId");
 
                     b.Navigation("Book");
                 });
@@ -696,8 +695,6 @@ namespace BookstoreApp.Data.Migrations
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Book", b =>
                 {
-                    b.Navigation("BestsellingBook");
-
                     b.Navigation("Genres");
 
                     b.Navigation("Votes");

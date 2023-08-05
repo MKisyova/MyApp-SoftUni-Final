@@ -4,6 +4,7 @@ using BookstoreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookstoreApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805080202_RemoveBestsellers")]
+    partial class RemoveBestsellers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,42 +198,6 @@ namespace BookstoreApp.Data.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("AuthorGenres");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.BestsellingBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("SalesCount")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId")
-                        .IsUnique();
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("BestsellingBooks");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Book", b =>
@@ -561,17 +527,6 @@ namespace BookstoreApp.Data.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("BookstoreApp.Data.Models.BestsellingBook", b =>
-                {
-                    b.HasOne("BookstoreApp.Data.Models.Book", "Book")
-                        .WithOne("BestsellingBook")
-                        .HasForeignKey("BookstoreApp.Data.Models.BestsellingBook", "BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
             modelBuilder.Entity("BookstoreApp.Data.Models.Book", b =>
                 {
                     b.HasOne("BookstoreApp.Data.Models.Author", "Author")
@@ -696,8 +651,6 @@ namespace BookstoreApp.Data.Migrations
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Book", b =>
                 {
-                    b.Navigation("BestsellingBook");
-
                     b.Navigation("Genres");
 
                     b.Navigation("Votes");

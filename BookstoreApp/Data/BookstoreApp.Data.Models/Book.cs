@@ -33,5 +33,9 @@
         public string ImageId { get; set; }
 
         public virtual Image Image { get; set; }
+
+        public virtual ICollection<Vote> Votes { get; set; }
+
+        public virtual BestsellingBook BestsellingBook { get; set; }
     }
 }

@@ -34,11 +34,13 @@
 
         public DbSet<Image> Images { get; set; }
 
-        public DbSet<Bestseller> Bestsellers { get; set; }
-
         public DbSet<BookGenre> BookGenres { get; set; }
 
         public DbSet<AuthorGenre> AuthorGenres { get; set; }
+
+        public DbSet<Vote> Votes { get; set; }
+
+        public DbSet<BestsellingBook> BestsellingBooks { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

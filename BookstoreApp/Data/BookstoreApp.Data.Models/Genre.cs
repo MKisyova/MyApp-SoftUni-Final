@@ -14,6 +14,8 @@
 
         public string Name { get; set; }
 
+        public bool IsFiction { get; set; }
+
         public virtual ICollection<AuthorGenre> Authors { get; set; }
 
         public virtual ICollection<BookGenre> Books { get; set; }
