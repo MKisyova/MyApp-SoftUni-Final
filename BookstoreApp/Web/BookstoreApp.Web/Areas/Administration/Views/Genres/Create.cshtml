@@ -1,0 +1,13 @@
+﻿@model BookstoreApp.Web.ViewModels.Genres.CreateGenreInputModel
+@{
+	this.ViewData["Title"] = "Create genre";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+
+<form method="post" class="col-md-6">
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<partial name="_CreateEditGenrePartial" model="@Model" />
+
+	<button type="submit" class="btn btn-primary mt-3">Create</button>
+</form>

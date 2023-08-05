@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class AllGenresViewModel
+    public class AllGenresViewModel : PagingViewModel
     {
         public IEnumerable<SingleGenreViewModel> Genres { get; set; }
     }

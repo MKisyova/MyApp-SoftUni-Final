@@ -29,6 +29,17 @@
             return genres;
         }
 
+        public IEnumerable<T> GetAllWithPaging<T>(int page, int itemsPerPage)
+        {
+            var books = this.genresRepository.AllAsNoTracking()
+                .OrderBy(x => x.Name)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+
+            return books;
+        }
+
         public T GetById<T>(int id)
         {
             var genre = this.genresRepository.AllAsNoTracking()
@@ -38,14 +49,29 @@
             return genre;
         }
 
+        public int GetCount()
+        {
+            return this.genresRepository.All().Count();
+        }
+
         public async Task CreateAsync(CreateGenreInputModel input)
         {
             var genre = new Genre
             {
                 Name = input.Name,
+                IsFiction = input.IsFiction,
             };
 
             await this.genresRepository.AddAsync(genre);
+            await this.genresRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(int id, EditGenreInputModel input)
+        {
+            var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == id);
+            genre.Name = input.Name;
+            genre.IsFiction = input.IsFiction;
+
             await this.genresRepository.SaveChangesAsync();
         }
 

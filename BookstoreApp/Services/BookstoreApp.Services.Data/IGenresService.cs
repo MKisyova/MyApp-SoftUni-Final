@@ -9,9 +9,15 @@
     {
         IEnumerable<T> GetAll<T>();
 
+        IEnumerable<T> GetAllWithPaging<T>(int page, int itemsPerPage);
+
+        int GetCount();
+
         T GetById<T>(int id);
 
         Task CreateAsync(CreateGenreInputModel input);
+
+        Task UpdateAsync(int id, EditGenreInputModel input);
 
         IEnumerable<KeyValuePair<string, string>> GetAllGenresAsKeyValuePair();
     }

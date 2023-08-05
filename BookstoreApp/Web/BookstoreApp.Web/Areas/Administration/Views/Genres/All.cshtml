@@ -1,0 +1,36 @@
+﻿@model BookstoreApp.Web.ViewModels.Genres.AllGenresViewModel
+@{
+	this.ViewData["Title"] = "All genres";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col" class="fw-bold fs-6">Name</th>
+      <th scope="col" class="fw-bold fs-6">Is fiction</th>
+    </tr>
+  </thead>
+  <tbody>
+        @for (int i = 0; i < this.Model.Genres.Count(); i++)
+        {
+            var number = i + 1 + (@Model.PageNumber - 1) * Model.ItemsPerPage;
+            var genre = Model.Genres.ToArray()[i];
+            <tr>
+                <th scope="row">@number</th>
+                <td>@genre.Name</td>
+                <td>@genre.IsFiction</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@genre.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@genre.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@genre.Id">Delete</a>
+                </td>
+            </tr>
+        }
+  </tbody>
+</table>
+
+<partial name="_PagingPartial" model="@Model" />
