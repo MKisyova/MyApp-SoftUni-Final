@@ -1,11 +1,6 @@
 ﻿namespace BookstoreApp.Web.ViewModels.Genres
 {
-    using System.ComponentModel.DataAnnotations;
-
-    public class CreateGenreInputModel
+    public class CreateGenreInputModel : BaseGenreInputModel
     {
-        [Required]
-        [MinLength(2)]
-        public string Name { get; set; }
     }
 }

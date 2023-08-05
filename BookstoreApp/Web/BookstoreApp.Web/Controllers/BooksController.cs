@@ -37,6 +37,7 @@
         {
             var viewModel = new AllBooksListViewModel
             {
+                ActionName = nameof(this.NewBooks),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCount(),
@@ -52,6 +53,7 @@
             // const int ItemsPerPage = 12;
             var viewModel = new AllBooksListViewModel
             {
+                ActionName = nameof(this.All),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCount(),

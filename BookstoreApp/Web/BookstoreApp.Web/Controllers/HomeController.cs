@@ -1,6 +1,7 @@
 ﻿namespace BookstoreApp.Web.Controllers
 {
     using System.Diagnostics;
+
     using BookstoreApp.Common;
     using BookstoreApp.Services.Data;
     using BookstoreApp.Web.ViewModels;
