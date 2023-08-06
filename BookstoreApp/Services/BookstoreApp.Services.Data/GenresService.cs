@@ -8,7 +8,7 @@
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Mapping;
-    using BookstoreApp.Web.ViewModels.Genres;
+    using BookstoreApp.Web.ViewModels.Administration.Genres;
 
     public class GenresService : IGenresService
     {
@@ -40,6 +40,28 @@
             return books;
         }
 
+        public IEnumerable<T> GetAllFiction<T>()
+        {
+            var genres = this.genresRepository.AllAsNoTracking()
+                .Where(x => x.IsFiction == true)
+                .OrderBy(x => x.Name)
+                .To<T>()
+                .ToList();
+
+            return genres;
+        }
+
+        public IEnumerable<T> GetAllNonfiction<T>()
+        {
+            var genres = this.genresRepository.AllAsNoTracking()
+                .Where(x => x.IsFiction == false)
+                .OrderBy(x => x.Name)
+                .To<T>()
+                .ToList();
+
+            return genres;
+        }
+
         public T GetById<T>(int id)
         {
             var genre = this.genresRepository.AllAsNoTracking()
@@ -51,7 +73,7 @@
 
         public int GetCount()
         {
-            return this.genresRepository.All().Count();
+            return this.genresRepository.AllAsNoTracking().Count();
         }
 
         public async Task CreateAsync(CreateGenreInputModel input)

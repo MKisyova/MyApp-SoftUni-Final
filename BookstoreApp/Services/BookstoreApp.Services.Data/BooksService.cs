@@ -9,7 +9,7 @@
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Mapping;
-    using BookstoreApp.Web.ViewModels.Books;
+    using BookstoreApp.Web.ViewModels.Administration.Books;
 
     public class BooksService : IBooksService
     {
@@ -35,8 +35,6 @@
                 Price = input.Price,
                 YearPublished = input.YearPublished,
                 AuthorId = input.AuthorId,
-
-                // Image
             };
 
             if (input.GenreIds != null)
@@ -73,6 +71,17 @@
         public IEnumerable<T> GetAll<T>(int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
+                .OrderBy(x => x.Title)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetAllRandom<T>(int page, int itemsPerPage)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
                 .OrderBy(x => Guid.NewGuid())
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
@@ -105,7 +114,13 @@
 
         public int GetCount()
         {
-            return this.booksRepository.All().Count();
+            return this.booksRepository.AllAsNoTracking().Count();
+        }
+
+        public int GetCountByGenreId(int genreId)
+        {
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.GenreId == genreId)).Count();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllBooksAsKeyValuePair()
@@ -132,6 +147,34 @@
             var books = this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Genres.Any(g => g.GenreId == genreId))
                 .To<T>().ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetByGenresFiction<T>()
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction))
+                .To<T>().ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetByGenresNonfiction<T>()
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction == false))
+                .To<T>().ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetByKeyword<T>(string keyword)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Title.Contains(keyword))
+                .To<T>()
+                .ToList();
 
             return books;
         }

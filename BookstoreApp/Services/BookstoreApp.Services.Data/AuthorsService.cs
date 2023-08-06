@@ -6,8 +6,8 @@
 
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
-
-    using BookstoreApp.Web.ViewModels.Authors;
+    using BookstoreApp.Services.Mapping;
+    using BookstoreApp.Web.ViewModels.Administration.Authors;
 
     public class AuthorsService : IAuthorsService
     {
@@ -54,6 +54,22 @@
 
             await this.authorsRepository.AddAsync(author);
             await this.authorsRepository.SaveChangesAsync();
+        }
+
+        public int GetCount()
+        {
+            return this.authorsRepository.AllAsNoTracking().Count();
+        }
+
+        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage)
+        {
+            var authors = this.authorsRepository.AllAsNoTracking()
+                .OrderBy(x => x.Name)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+
+            return authors;
         }
     }
 }

@@ -28,10 +28,10 @@
 							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-book-open"></i> Books settings</a>
 							<ul class="dropdown-menu">
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Books" asp-action="Create">Create book</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="All">All books</a>
 								</li>
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Books" asp-action="Edit">Edit book</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="Create">Create book</a>
 								</li>
 							</ul>
 						</li>
@@ -40,10 +40,10 @@
 							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-secret"></i> Authors settings</a>
 							<ul class="dropdown-menu">
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Authors" asp-action="Create">Create author</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="All">All authors</a>
 								</li>
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Authors" asp-action="Edit">Edit author</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="Create">Create author</a>
 								</li>
 							</ul>
 						</li>
@@ -52,23 +52,13 @@
 							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-bookmark"></i> Genres settings</a>
 							<ul class="dropdown-menu">
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Genres" asp-action="Create">Create genre</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="All">All genres</a>
 								</li>
 								<li>
-									<a class="dropdown-item text-dark" asp-area="" asp-controller="Genres" asp-action="Edit">Edit genre</a>
+									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="Create">Create genre</a>
 								</li>
 							</ul>
 						</li>
-
-						@*                        <li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>*@
-						@*                        <li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-						</li>*@
-						@*            <li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>*@
 					</ul>
 					<partial name="_LoginPartial" />
 				</div>
@@ -96,6 +86,12 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="NewBooks">New Books</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Fiction">Fiction</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Nonfiction">Nonfiction</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Promotions" asp-action="SpecialOffers">Special Offers</a>
