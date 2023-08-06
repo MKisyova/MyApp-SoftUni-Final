@@ -54,6 +54,10 @@
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
             services.AddSingleton(configuration);
 
@@ -65,10 +69,10 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<IBooksService, BooksService>();
             services.AddTransient<IAuthorsService, AuthorsService>();
             services.AddTransient<IGenresService, GenresService>();
+            services.AddTransient<IVotesService, VotesService>();
         }
 
         private static void Configure(WebApplication app)
