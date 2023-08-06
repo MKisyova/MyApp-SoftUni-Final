@@ -5,6 +5,8 @@
 
     public class BookGenresViewModel : IMapFrom<BookGenre>
     {
-        public string Name { get; set; }
+        public int GenreId { get; set; }
+
+        public string GenreName { get; set; }
     }
 }

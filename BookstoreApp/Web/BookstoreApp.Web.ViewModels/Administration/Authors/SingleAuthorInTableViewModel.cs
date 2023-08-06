@@ -1,9 +1,9 @@
-﻿namespace BookstoreApp.Web.ViewModels.Genres
+﻿namespace BookstoreApp.Web.ViewModels.Administration.Authors
 {
     using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Mapping;
 
-    public class SingleGenreViewModel : IMapFrom<Genre>
+    public class SingleAuthorInTableViewModel : IMapFrom<Author>
     {
         public int Id { get; set; }
 
