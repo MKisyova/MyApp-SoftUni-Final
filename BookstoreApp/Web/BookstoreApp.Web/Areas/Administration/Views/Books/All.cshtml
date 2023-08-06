@@ -1,0 +1,42 @@
+﻿@model BookstoreApp.Web.ViewModels.Administration.Books.AllBooksInTableViewModel
+@{
+	this.ViewData["Title"] = "All books";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col" class="fw-bold fs-6">Title</th>
+      <th scope="col" class="fw-bold fs-6">Author</th>
+      <th scope="col" class="fw-bold fs-6">Pages</th>
+      <th scope="col" class="fw-bold fs-6">Year published</th>
+      <th scope="col" class="fw-bold fs-6">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+        @for (int i = 0; i < this.Model.Books.Count(); i++)
+        {
+            var number = i + 1 + (@Model.PageNumber - 1) * Model.ItemsPerPage;
+            var book = Model.Books.ToArray()[i];
+            <tr>
+                <th scope="row">@number</th>
+                <td>@book.Title</td>
+                <td>@book.AuthorName</td>
+                <td>@book.Pages</td>
+                <td>@book.YearPublished</td>
+                <td>@book.Price</td>               
+                <td>
+                    <a asp-action="Edit" asp-route-id="@book.Id">Edit</a> |
+                    <a asp-area="" asp-controller="Books" asp-action="ById" asp-route-id="@book.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                </td>
+            </tr>
+        }
+  </tbody>
+</table>
+
+<partial name="_PagingPartial" model="@Model" />

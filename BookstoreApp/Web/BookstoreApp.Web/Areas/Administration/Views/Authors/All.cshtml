@@ -1,0 +1,34 @@
+﻿@model BookstoreApp.Web.ViewModels.Administration.Authors.AllAuthorsInTableViewModel
+@{
+	this.ViewData["Title"] = "All authors";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col" class="fw-bold fs-6">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+        @for (int i = 0; i < this.Model.Authors.Count(); i++)
+        {
+            var number = i + 1 + (@Model.PageNumber - 1) * Model.ItemsPerPage;
+            var author = Model.Authors.ToArray()[i];
+            <tr>
+                <th scope="row">@number</th>
+                <td>@author.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@author.Id">Edit</a> |
+                    <a asp-area="" asp-controller="Authors" asp-action="ById" asp-route-id="@author.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@author.Id">Delete</a>
+                </td>
+            </tr>
+        }
+  </tbody>
+</table>
+
+<partial name="_PagingPartial" model="@Model" />
