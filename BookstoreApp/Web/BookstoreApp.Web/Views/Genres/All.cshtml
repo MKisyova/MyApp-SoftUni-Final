@@ -13,11 +13,11 @@
 
 		if (i % 2 == 0)
 		{
-			bookClass = "fas fa-book-reader";
+			bookClass = "fas fa-book-open";
 		}
 		else if (i % 3 == 0)
 		{
-			bookClass = "fas fa-book-open";
+			bookClass = "fas fa-book-reader";
 		}
 		<div class="col-md-3 mb-2">
 			<a asp-action="BooksByGenreId" asp-route-id="@genre.Id"><i class="@bookClass"></i> @genre.Name</a>

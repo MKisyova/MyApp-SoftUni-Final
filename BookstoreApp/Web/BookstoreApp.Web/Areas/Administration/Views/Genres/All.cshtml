@@ -1,4 +1,4 @@
-﻿@model BookstoreApp.Web.ViewModels.Genres.AllGenresViewModel
+﻿@model BookstoreApp.Web.ViewModels.Administration.Genres.AllGenresInTableViewModel
 @{
 	this.ViewData["Title"] = "All genres";
 }
@@ -25,7 +25,6 @@
                 <td>@genre.IsFiction</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@genre.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@genre.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@genre.Id">Delete</a>
                 </td>
             </tr>

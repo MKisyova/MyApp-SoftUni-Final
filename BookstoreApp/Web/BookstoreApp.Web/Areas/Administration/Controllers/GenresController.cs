@@ -4,7 +4,7 @@
 
     using BookstoreApp.Common;
     using BookstoreApp.Services.Data;
-    using BookstoreApp.Web.ViewModels.Genres;
+    using BookstoreApp.Web.ViewModels.Administration.Genres;
     using Microsoft.AspNetCore.Mvc;
 
     public class GenresController : AdministrationController
@@ -18,13 +18,14 @@
 
         public IActionResult All(int pageNumber = 1)
         {
-            var viewModel = new AllGenresViewModel
+            var viewModel = new AllGenresInTableViewModel
             {
                 ActionName = nameof(this.All),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
                 TotalItemsCount = this.genresService.GetCount(),
-                Genres = this.genresService.GetAllWithPaging<SingleGenreViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
+                Genres = this.genresService
+                .GetAllWithPaging<SingleGenreInTableViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);

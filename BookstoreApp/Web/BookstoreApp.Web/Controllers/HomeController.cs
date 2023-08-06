@@ -11,25 +11,27 @@
 
     public class HomeController : BaseController
     {
-        private readonly IGetCountsService countsService;
         private readonly IBooksService booksService;
+        private readonly IAuthorsService authorsService;
+        private readonly IGenresService genresService;
 
         public HomeController(
-            IGetCountsService countsService,
-            IBooksService booksService)
+            IBooksService booksService,
+            IAuthorsService authorsService,
+            IGenresService genresService)
         {
-            this.countsService = countsService;
             this.booksService = booksService;
+            this.authorsService = authorsService;
+            this.genresService = genresService;
         }
 
         public IActionResult Index()
         {
-            var counts = this.countsService.GetCounts();
             var viewModel = new IndexViewModel
             {
-                BooksCount = counts.BooksCount,
-                AuthorsCount = counts.AuthorsCount,
-                GenresCount = counts.GenresCount,
+                BooksCount = this.booksService.GetCount(),
+                AuthorsCount = this.authorsService.GetCount(),
+                GenresCount = this.genresService.GetCount(),
                 Books = this.booksService.GetBookForHomePage<SmallBookViewModel>(GlobalConstants.BooksForHomePageCount),
             };
 
