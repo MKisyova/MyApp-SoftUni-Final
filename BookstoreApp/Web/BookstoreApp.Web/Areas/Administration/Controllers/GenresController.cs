@@ -47,8 +47,8 @@
             }
 
             await this.genresService.CreateAsync(input);
+            this.TempData["Message"] = "Genre added successfully.";
 
-            // redirect to all + tempData
             return this.RedirectToAction(nameof(this.All));
         }
 
@@ -68,8 +68,17 @@
             }
 
             await this.genresService.UpdateAsync(id, input);
+            this.TempData["Message"] = "Genre updated successfully.";
 
-            // redirect to all + tempData
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.genresService.DeleteAsync(id);
+            this.TempData["Message"] = "Genre deleted successfully.";
+
             return this.RedirectToAction(nameof(this.All));
         }
     }

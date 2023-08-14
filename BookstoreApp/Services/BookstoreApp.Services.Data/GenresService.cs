@@ -97,6 +97,13 @@
             await this.genresRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == id);
+            this.genresRepository.Delete(genre);
+            await this.genresRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<KeyValuePair<string, string>> GetAllGenresAsKeyValuePair()
         {
             return this.genresRepository.AllAsNoTracking().Select(x => new

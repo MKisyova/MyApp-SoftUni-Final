@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using BookstoreApp.Web.ViewModels.Administration.Genres;
 
     public interface IGenresService
@@ -21,6 +22,8 @@
         Task CreateAsync(CreateGenreInputModel input);
 
         Task UpdateAsync(int id, EditGenreInputModel input);
+
+        Task DeleteAsync(int id);
 
         IEnumerable<KeyValuePair<string, string>> GetAllGenresAsKeyValuePair();
     }
