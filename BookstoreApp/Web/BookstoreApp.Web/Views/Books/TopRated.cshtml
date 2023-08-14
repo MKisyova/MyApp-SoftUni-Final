@@ -1,6 +1,6 @@
 ﻿@model BookstoreApp.Web.ViewModels.Books.AllBooksListViewModel
 @{
-	this.ViewData["Title"] = "All books";
+	this.ViewData["Title"] = "Top Rated";
 }
 
 <h3 class="title text-dark">@this.ViewData["Title"]</h3>
@@ -13,5 +13,3 @@
 </div>
 <hr />
 <partial name="_PagingPartial" model="@Model" />
-
-

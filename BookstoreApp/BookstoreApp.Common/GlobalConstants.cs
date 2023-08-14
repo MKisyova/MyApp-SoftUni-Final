@@ -9,5 +9,7 @@
         public const int ItemsPerPage = 12;
 
         public const int BooksForHomePageCount = 12;
+
+        public const int BestsellingBooksCount = 24;
     }
 }

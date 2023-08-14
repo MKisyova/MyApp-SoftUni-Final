@@ -1,1 +1,15 @@
-﻿<h1>Bestsellers of the month</h1>
+﻿@model BookstoreApp.Web.ViewModels.Books.AllBooksListViewModel
+@{
+	this.ViewData["Title"] = "Bestsellers";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+<div class="row">
+	@foreach (var book in this.Model.Books)
+	{
+		<partial name="_SmallBookPartial" model="@book" />
+	}
+</div>
+<hr />
+<partial name="_PagingPartial" model="@Model" />
