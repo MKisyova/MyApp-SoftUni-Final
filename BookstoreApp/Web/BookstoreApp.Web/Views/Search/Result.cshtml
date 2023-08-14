@@ -1,0 +1,19 @@
+﻿@model BookstoreApp.Web.ViewModels.Search.SearchResultViewModel
+@{
+	this.ViewData["Title"] = "Search result";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+
+@if (!Model.Books.Any())
+{
+	<p class="title text-dark">No books found</p>
+}
+
+<div class="row">
+	@foreach (var book in this.Model.Books)
+	{
+		<partial name="_SmallBookPartial" model="@book" />
+	}
+</div>

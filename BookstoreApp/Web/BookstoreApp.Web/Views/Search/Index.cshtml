@@ -1,0 +1,20 @@
+﻿@model BookstoreApp.Web.ViewModels.Search.SearchInputModel
+
+<p>Search by book title or author</p>
+
+<form asp-action="Result" method="get">
+	<div class="col-lg-6 col-md-12 col-12">
+		<div class="input-group float-center">
+			<div class="form-outline">
+				@*			<input type="search" id="form1" class="form-control">*@
+				<input asp-for="Keyword" class="form-control">
+				<label asp-for="Keyword" class="form-label" style="margin-left: 0px;">Search</label>
+				<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 47.2px;"></div><div class="form-notch-trailing"></div></div>
+			</div>
+			<button class="btn btn-primary shadow-0">
+				<i class="fas fa-search"></i>
+			</button>
+			@*<a asp-controller="Books" asp-action="ById"></a>*@
+		</div>
+	</div>
+</form>
