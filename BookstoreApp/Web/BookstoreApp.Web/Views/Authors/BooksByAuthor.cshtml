@@ -1,0 +1,23 @@
+﻿@model BookstoreApp.Web.ViewModels.Authors.BooksByAuthorViewModel
+@{
+	this.ViewData["Title"] = $"All books of {Model.Author.Name}";
+}
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+<div class="row">
+	<p>@Model.Author.ShortBiography</p>
+</div>
+<hr />
+
+@if (!Model.Books.Any())
+{
+	<p class="title text-dark">No books found</p>
+}
+<div class="row">
+	@foreach (var book in this.Model.Books)
+	{
+		<partial name="_SmallBookPartial" model="@book" />
+	}
+</div>
+<hr />
+<partial name="_PagingPartial" model="@Model" />
