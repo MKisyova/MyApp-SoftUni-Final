@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using BookstoreApp.Common;
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Mapping;
@@ -13,7 +14,6 @@
 
     public class BooksService : IBooksService
     {
-        private readonly string[] allowedExtensions = new[] { "jpg", "png" };
         private readonly IDeletableEntityRepository<Book> booksRepository;
         private readonly IDeletableEntityRepository<Genre> genresRepository;
 
@@ -47,8 +47,16 @@
             }
 
             Directory.CreateDirectory($"{imagePath}/books/");
+            Stream fileStream = await this.AddImage(input, imagePath, book);
+
+            await this.booksRepository.AddAsync(book);
+            await this.booksRepository.SaveChangesAsync();
+        }
+
+        private async Task<Stream> AddImage(BaseBookInputModel input, string imagePath, Book book)
+        {
             var extension = Path.GetExtension(input.Image.FileName).TrimStart('.');
-            if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
+            if (!GlobalConstants.AllowedExtensions.Any(x => extension.EndsWith(x)))
             {
                 throw new Exception($"Invalid image extension {extension}");
             }
@@ -61,10 +69,44 @@
             book.Image = image;
 
             var physicalPath = $"{imagePath}/books/{image.Id}.{extension}";
-            using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
+            Stream fileStream = new FileStream(physicalPath, FileMode.Create);
             await input.Image.CopyToAsync(fileStream);
+            return fileStream;
+        }
 
-            await this.booksRepository.AddAsync(book);
+        public async Task UpdateAsync(int id, EditBookInputModel input, string imagePath)
+        {
+            var book = this.booksRepository.All().FirstOrDefault(x => x.Id == id);
+            book.Title = input.Title;
+            book.AuthorId = input.AuthorId;
+            book.YearPublished = input.YearPublished;
+            book.Pages = input.Pages;
+            book.Price = input.Price;
+            if (input.Image != null)
+            {
+                Stream fileStream = await this.AddImage(input, imagePath, book);
+            }
+
+            if (input.GenreIds != null)
+            {
+                book.Genres.Clear();
+
+                foreach (var inputGenreId in input.GenreIds)
+                {
+                    var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == inputGenreId);
+                    book.Genres.Add(new BookGenre { Genre = genre, });
+                }
+            }
+
+            // book.ImageId = input.Image;
+            // book.Genres = input.GenreIds;
+            await this.booksRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var book = this.booksRepository.All().FirstOrDefault(x => x.Id == id);
+            this.booksRepository.Delete(book);
             await this.booksRepository.SaveChangesAsync();
         }
 
@@ -123,14 +165,17 @@
                 .Where(x => x.Genres.Any(g => g.GenreId == genreId)).Count();
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GetAllBooksAsKeyValuePair()
+        public int GetCountByAuthorId(int authorId)
         {
-            return this.booksRepository.AllAsNoTracking().Select(x => new
-            {
-                x.Id,
-                x.Title,
-            }).OrderBy(x => x.Title)
-              .ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Title));
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.AuthorId == authorId).Count();
+        }
+
+        public int GetCountByGenresFiction()
+        {
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction))
+                .Count();
         }
 
         public T GetById<T>(int id)
@@ -169,14 +214,51 @@
             return books;
         }
 
+        public IEnumerable<T> GetByAuthorId<T>(int authorId)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.AuthorId == authorId)
+                .To<T>().ToList();
+
+            return books;
+        }
+
         public IEnumerable<T> GetByKeyword<T>(string keyword)
         {
             var books = this.booksRepository.AllAsNoTracking()
-                .Where(x => x.Title.Contains(keyword))
+                .Where(x => x.Title.Contains(keyword) || x.Author.Name.Contains(keyword))
                 .To<T>()
                 .ToList();
 
             return books;
+        }
+
+        public IEnumerable<T> GetBySalesCount<T>(int page, int itemsPerPage)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .OrderByDescending(x => x.BestsellingBook.SalesCount)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>().ToList();
+
+            return books;
+        }
+
+        public IEnumerable<T> GetTopRated<T>(int page, int itemsPerPage)
+        {
+            var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Votes.Count() > 0)
+                .OrderByDescending(x => x.Votes.Average(v => v.Value))
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>().ToList();
+
+            return books;
+        }
+
+        public int GetCountByTopRated()
+        {
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Votes.Count() > 0)
+                .Count();
         }
     }
 }

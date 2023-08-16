@@ -4,6 +4,11 @@
 }
 
 <h3 class="title text-dark">@this.ViewData["Title"]</h3>
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
 <hr />
 
 <table class="table table-striped">

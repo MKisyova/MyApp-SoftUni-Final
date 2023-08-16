@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using BookstoreApp.Web.ViewModels.Administration.Books;
 
     public interface IBooksService
@@ -11,6 +12,8 @@
         IEnumerable<T> GetAll<T>(int page, int itemsPerPage);
 
         IEnumerable<T> GetAllRandom<T>(int page, int itemsPerPage);
+
+        IEnumerable<T> GetByAuthorId<T>(int authorId);
 
         IEnumerable<T> GetByGenreId<T>(int genreId);
 
@@ -24,12 +27,24 @@
 
         IEnumerable<T> GetByKeyword<T>(string keyword);
 
+        IEnumerable<T> GetBySalesCount<T>(int page, int itemsPerPage);
+
+        IEnumerable<T> GetTopRated<T>(int page, int itemsPerPage);
+
         int GetCountByGenreId(int genreId);
+
+        int GetCountByAuthorId(int authorId);
+
+        int GetCountByGenresFiction();
+
+        int GetCountByTopRated();
 
         int GetCount();
 
         Task CreateAsync(CreateBookInputModel input, string imagePath);
 
-        IEnumerable<KeyValuePair<string, string>> GetAllBooksAsKeyValuePair();
+        Task UpdateAsync(int id, EditBookInputModel input, string imagePath);
+
+        Task DeleteAsync(int id);
     }
 }

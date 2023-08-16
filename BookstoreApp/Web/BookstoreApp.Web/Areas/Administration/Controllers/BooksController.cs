@@ -74,7 +74,41 @@
                 return this.View(input);
             }
 
-            // redirect to all + tempData
+            this.TempData["Message"] = "Book created successfully.";
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var input = this.booksService.GetById<EditBookInputModel>(id);
+            input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+            input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+
+            return this.View(input);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditBookInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+                input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+                return this.View(input);
+            }
+
+            await this.booksService.UpdateAsync(id, input, $"{this.environment.WebRootPath}/images");
+            this.TempData["Message"] = "Book updated successfully.";
+
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.booksService.DeleteAsync(id);
+            this.TempData["Message"] = "Book deleted successfully.";
+
             return this.RedirectToAction(nameof(this.All));
         }
     }

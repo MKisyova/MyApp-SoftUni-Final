@@ -1,6 +1,9 @@
 ﻿namespace BookstoreApp.Web.ViewModels.Administration.Books
 {
-    public class EditBookInputModel : BaseBookInputModel
+    using BookstoreApp.Data.Models;
+    using BookstoreApp.Services.Mapping;
+
+    public class EditBookInputModel : BaseBookInputModel, IMapFrom<Book>
     {
         public int Id { get; set; }
     }
