@@ -10,11 +10,11 @@ Administrators can create, edit and delete books, authors and genres. For their 
 
 Technologies used:
 
-ASP.NET Core 6.0
-Entity Framework Core 6.0
-MS SQL Server
-Bootstrap 5.1.3
-JavaScript
-HTML
-CSS
-Theme - Bootstrap eCommerce MDB
+ASP.NET Core 6.0 
+/ Entity Framework Core 6.0 
+/ MS SQL Server 
+/ Bootstrap 5.1.3 
+/ JavaScript 
+/ HTML 
+/ CSS 
+/ Theme - Bootstrap eCommerce MDB
