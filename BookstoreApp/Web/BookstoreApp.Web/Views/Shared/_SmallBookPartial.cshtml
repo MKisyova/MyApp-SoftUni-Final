@@ -1,7 +1,8 @@
 ﻿@model BookstoreApp.Web.ViewModels.Books.SmallBookViewModel
 
 <div class="col-md-2">
-	<div class="card mb-4">
+@*	<div class="card mb-4">*@
+	<div class="card mb-4" style="height: 30rem; ">
 		<a asp-controller="Books" asp-action="ById" asp-route-id="@Model.Id">
 			<img src="@Model.ImageId" class="img-fluid rounded-2 fit">
 		</a>

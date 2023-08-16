@@ -65,6 +65,10 @@ body {
     margin-bottom: 60px;
 }
 
+.cadet-blue-color {
+    background-color: CadetBlue;
+}
+
 .footer {
     position: absolute;
     bottom: 0;

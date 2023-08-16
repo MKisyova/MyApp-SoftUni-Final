@@ -35,7 +35,7 @@
 
             foreach (var author in viewModel.Authors)
             {
-                author.ShortBiography = $"{string.Join(" ", author.ShortBiography.Split(' ').Take(10))} ...";
+                author.ShortBiography = $"{string.Join(" ", author.ShortBiography.Split(' ').Take(GlobalConstants.WordsFromShortBiography))} ...";
             }
 
             return this.View(viewModel);

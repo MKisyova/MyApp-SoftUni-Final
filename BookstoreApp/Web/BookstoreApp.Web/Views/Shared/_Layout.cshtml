@@ -21,44 +21,45 @@
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
+						@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+						{
 
-						@*if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-						{*@
-						<li class="nav-item dropdown">
-							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-book-open"></i> Books settings</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="All">All books</a>
-								</li>
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="Create">Create book</a>
-								</li>
-							</ul>
-						</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-book-open"></i> Books settings</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="All">All books</a>
+									</li>
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Books" asp-action="Create">Create book</a>
+									</li>
+								</ul>
+							</li>
 
-						<li class="nav-item dropdown">
-							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-secret"></i> Authors settings</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="All">All authors</a>
-								</li>
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="Create">Create author</a>
-								</li>
-							</ul>
-						</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-secret"></i> Authors settings</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="All">All authors</a>
+									</li>
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Authors" asp-action="Create">Create author</a>
+									</li>
+								</ul>
+							</li>
 
-						<li class="nav-item dropdown">
-							<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-bookmark"></i> Genres settings</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="All">All genres</a>
-								</li>
-								<li>
-									<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="Create">Create genre</a>
-								</li>
-							</ul>
-						</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-bookmark"></i> Genres settings</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="All">All genres</a>
+									</li>
+									<li>
+										<a class="dropdown-item text-dark" asp-area="Administration" asp-controller="Genres" asp-action="Create">Create genre</a>
+									</li>
+								</ul>
+							</li>
+						}
 					</ul>
 					<partial name="_LoginPartial" />
 				</div>
@@ -76,10 +77,16 @@
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="All">Categories</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Search" asp-action="Index">Search</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="All">Books</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="All">Categories</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="All">Authors</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Bestsellers">Bestsellers</a>
@@ -88,20 +95,20 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="NewBooks">New Books</a>
 						</li>
 						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="TopRated">Top Rated</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Fiction">Fiction</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Nonfiction">Nonfiction</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Promotions" asp-action="SpecialOffers">Special Offers</a>
-						</li>
-						@if (this.User.Identity.IsAuthenticated)
+						@*						@if (this.User.Identity.IsAuthenticated)
 						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Basket</a>
-							</li>
-						}
+						<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Basket</a>
+						</li>
+						}*@
 					</ul>
 				</div>
 			</div>

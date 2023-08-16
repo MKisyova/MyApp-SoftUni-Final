@@ -54,12 +54,12 @@
         {
             var viewModel = new AllBooksListViewModel
             {
-                ActionName = nameof(this.NewBooks),
+                ActionName = nameof(this.Bestsellers),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCount(),
                 Books = this.booksService
-                .GetBySalesCount<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage, GlobalConstants.BestsellingBooksCount),
+                .GetBySalesCount<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);
@@ -69,10 +69,10 @@
         {
             var viewModel = new AllBooksListViewModel
             {
-                ActionName = nameof(this.NewBooks),
+                ActionName = nameof(this.TopRated),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
-                TotalItemsCount = this.booksService.GetCount(),
+                TotalItemsCount = this.booksService.GetCountByTopRated(),
                 Books = this.booksService
                 .GetTopRated<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };

@@ -38,7 +38,7 @@
         public IActionResult Create()
         {
             var model = new CreateAuthorInputModel();
-            model.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+            model.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
 
             return this.View(model);
         }
@@ -48,13 +48,45 @@
         {
             if (!this.ModelState.IsValid)
             {
-                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
                 return this.View(input);
             }
 
             await this.authorsService.CreateAsync(input);
+            this.TempData["Message"] = "Author created successfully.";
 
-            // redirect to all + tempData
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var input = this.authorsService.GetById<EditAuthorInputModel>(id);
+            input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
+
+            return this.View(input);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditAuthorInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
+                return this.View(input);
+            }
+
+            await this.authorsService.UpdateAsync(id, input);
+            this.TempData["Message"] = "Author updated successfully.";
+
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.authorsService.DeleteAsync(id);
+            this.TempData["Message"] = "Author deleted successfully.";
+
             return this.RedirectToAction(nameof(this.All));
         }
     }

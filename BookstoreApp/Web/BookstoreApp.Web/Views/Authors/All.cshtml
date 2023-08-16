@@ -9,10 +9,7 @@
 	@foreach (var author in this.Model.Authors)
 	{
 		<div class="col-md-2">
-			<div class="card mb-4">
-				@*				<a asp-controller="Books" asp-action="ById" asp-route-id="@Model.Id">
-			<img src="@Model.ImageId" class="img-fluid rounded-2 fit">
-			</a>*@
+			<div class="card mb-4" style="height: 15rem; ">
 				<div class="card-body">
 					<a asp-controller="Authors" asp-action="BooksByAuthor" asp-route-id="@author.Id">
 						<h5 class="card-title">@author.Name</h5>
