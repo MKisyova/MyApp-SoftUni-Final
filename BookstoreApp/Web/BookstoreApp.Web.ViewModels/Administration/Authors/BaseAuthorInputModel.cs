@@ -15,6 +15,6 @@
         [Display(Name = "Genres")]
         public IEnumerable<int> GenreIds { get; set; }
 
-        public IEnumerable<KeyValuePair<string, string>> Genres { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> GenresItems { get; set; }
     }
 }

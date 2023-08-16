@@ -1,6 +1,7 @@
 ﻿@model BookstoreApp.Web.ViewModels.Administration.Authors.CreateAuthorInputModel
 @{
 	this.ViewData["Title"] = "Create author";
+	var genres = this.Model.GenresItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h3>@this.ViewData["Title"]</h3>
@@ -8,6 +9,13 @@
 <form method="post" class="col-md-6">
 	<div asp-validation-summary="All" class="text-danger"></div>
 	<partial name="_CreateEditAuthorPartial" model="@Model" />
+	<div class="form-group mb-3">
+		<label asp-for="GenreIds"></label>
+		<select asp-for="GenreIds" class="form-control" asp-items="genres" multiple>
+			<option selected>-- Choose genres(for multiple genres press and hold CTRL) --</option>
+		</select>
+		<span asp-validation-for="GenreIds" class="text-danger"></span>
+	</div>
 
 	<button type="submit" class="btn btn-primary mt-3">Create</button>
 </form>

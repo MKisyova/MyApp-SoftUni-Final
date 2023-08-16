@@ -56,6 +56,32 @@
             await this.authorsRepository.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(int id, EditAuthorInputModel input)
+        {
+            var author = this.authorsRepository.All().FirstOrDefault(x => x.Id == id);
+            author.Name = input.Name;
+            author.ShortBiography = input.ShortBiography;
+            if (input.GenreIds != null)
+            {
+                author.Genres.Clear();
+
+                foreach (var inputGenreId in input.GenreIds)
+                {
+                    var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == inputGenreId);
+                    author.Genres.Add(new AuthorGenre { Genre = genre, });
+                }
+            }
+
+            await this.authorsRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var author = this.authorsRepository.All().FirstOrDefault(x => x.Id == id);
+            this.authorsRepository.Delete(author);
+            await this.authorsRepository.SaveChangesAsync();
+        }
+
         public int GetCount()
         {
             return this.authorsRepository.AllAsNoTracking().Count();
@@ -70,6 +96,15 @@
                 .ToList();
 
             return authors;
+        }
+
+        public T GetById<T>(int id)
+        {
+            var author = this.authorsRepository.AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .To<T>().FirstOrDefault();
+
+            return author;
         }
     }
 }
