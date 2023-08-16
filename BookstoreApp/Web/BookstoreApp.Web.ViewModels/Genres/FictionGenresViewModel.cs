@@ -4,7 +4,7 @@
 
     using BookstoreApp.Web.ViewModels.Books;
 
-    public class FictionGenresViewModel
+    public class FictionGenresViewModel : PagingViewModel
     {
         public IEnumerable<SingleGenreViewModel> Genres { get; set; }
 

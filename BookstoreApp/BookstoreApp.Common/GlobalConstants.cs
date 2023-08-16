@@ -10,6 +10,8 @@
 
         public const int BooksForHomePageCount = 12;
 
-        public const int BestsellingBooksCount = 24;
+        public const int WordsFromShortBiography = 10;
+
+        public static readonly string[] AllowedExtensions = new[] { "jpg", "png" };
     }
 }

@@ -29,10 +29,14 @@
             return this.View(viewModel);
         }
 
-        public IActionResult Fiction()
+        public IActionResult Fiction(int pageNumber = 1)
         {
             var viewModel = new FictionGenresViewModel
             {
+                ActionName = nameof(this.Fiction),
+                ItemsPerPage = GlobalConstants.ItemsPerPage,
+                PageNumber = pageNumber,
+                TotalItemsCount = this.booksService.GetCountByGenresFiction(),
                 Genres = this.genresService.GetAllFiction<SingleGenreViewModel>(),
                 Books = this.booksService.GetByGenresFiction<SmallBookViewModel>(),
             };

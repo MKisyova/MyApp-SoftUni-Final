@@ -9,12 +9,21 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Books\ById.cshtml" />
+    <Content Remove="Views\Books\_PartialCreateEditBook.cshtml" />
+  </ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
 	
 	<ItemGroup>
 		<InternalsVisibleTo Include="BookstoreApp.Web.Tests" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Include="Views\Books\ById.cshtml" />
 	</ItemGroup>
 
   <ItemGroup>

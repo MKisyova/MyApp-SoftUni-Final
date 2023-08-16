@@ -47,7 +47,7 @@
             }
 
             await this.genresService.CreateAsync(input);
-            this.TempData["Message"] = "Genre added successfully.";
+            this.TempData["Message"] = "Genre created successfully.";
 
             return this.RedirectToAction(nameof(this.All));
         }

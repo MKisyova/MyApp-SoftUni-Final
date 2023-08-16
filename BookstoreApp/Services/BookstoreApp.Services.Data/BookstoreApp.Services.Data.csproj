@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BookstoreApp.Common\BookstoreApp.Common.csproj" />
     <ProjectReference Include="..\..\Data\BookstoreApp.Data.Common\BookstoreApp.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\BookstoreApp.Data.Models\BookstoreApp.Data.Models.csproj" />
     <ProjectReference Include="..\..\Web\BookstoreApp.Web.ViewModels\BookstoreApp.Web.ViewModels.csproj" />
