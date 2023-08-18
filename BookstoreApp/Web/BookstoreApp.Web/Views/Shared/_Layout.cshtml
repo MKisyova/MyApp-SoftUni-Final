@@ -103,13 +103,13 @@
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Nonfiction">Nonfiction</a>
 						</li>
-						@*						@if (this.User.Identity.IsAuthenticated)
-						{
-						<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Basket</a>
-						</li>
-						}*@
 					</ul>
+					@if (this.User.Identity.IsAuthenticated)
+					{						
+						<a class="nav-link text-dark float-end" asp-area="" asp-controller="ShoppingCart" asp-action="Details">
+							Cart <i class="fas fa-shopping-basket"></i>
+						</a>						
+					}
 				</div>
 			</div>
 		</nav>

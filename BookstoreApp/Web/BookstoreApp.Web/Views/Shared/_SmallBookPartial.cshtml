@@ -10,7 +10,7 @@
 			<h5 class="card-title">@Model.Title</h5>
 			<h6 class="card-subtitle mb-2 text-muted">@Model.AuthorName</h6>
 			<h6 class="card-subtitle mb-2 text-danger">@Model.Price €</h6>
-			<a href="#" class="btn btn-primary">By book</a>
+			<a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary">Add to cart</a>
 		</div>
 	</div>
 </div>
