@@ -4,6 +4,7 @@ using BookstoreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookstoreApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818185556_AddBookShoppingCart")]
+    partial class AddBookShoppingCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace BookstoreApp.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("BookShoppingCart", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingCartsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "ShoppingCartsId");
+
+                    b.HasIndex("ShoppingCartsId");
+
+                    b.ToTable("BookShoppingCart");
+                });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.ApplicationRole", b =>
                 {
@@ -311,6 +328,29 @@ namespace BookstoreApp.Data.Migrations
                     b.ToTable("BookGenres");
                 });
 
+            modelBuilder.Entity("BookstoreApp.Data.Models.BookShoppingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("BookShoppingCarts");
+                });
+
             modelBuilder.Entity("BookstoreApp.Data.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -431,29 +471,6 @@ namespace BookstoreApp.Data.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("ShoppingCarts");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCartBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("ShoppingCartId");
-
-                    b.ToTable("ShoppingCartBooks");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Vote", b =>
@@ -594,6 +611,21 @@ namespace BookstoreApp.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BookShoppingCart", b =>
+                {
+                    b.HasOne("BookstoreApp.Data.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BookstoreApp.Data.Models.ShoppingCart", null)
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BookstoreApp.Data.Models.AuthorGenre", b =>
                 {
                     b.HasOne("BookstoreApp.Data.Models.Author", "Author")
@@ -660,25 +692,16 @@ namespace BookstoreApp.Data.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("BookstoreApp.Data.Models.ApplicationUser", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("BookstoreApp.Data.Models.ShoppingCart", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCartBook", b =>
+            modelBuilder.Entity("BookstoreApp.Data.Models.BookShoppingCart", b =>
                 {
                     b.HasOne("BookstoreApp.Data.Models.Book", "Book")
-                        .WithMany("ShoppingCarts")
+                        .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BookstoreApp.Data.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("Books")
+                        .WithMany()
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -686,6 +709,15 @@ namespace BookstoreApp.Data.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("BookstoreApp.Data.Models.ApplicationUser", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("BookstoreApp.Data.Models.ShoppingCart", "UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Vote", b =>
@@ -782,8 +814,6 @@ namespace BookstoreApp.Data.Migrations
 
                     b.Navigation("Genres");
 
-                    b.Navigation("ShoppingCarts");
-
                     b.Navigation("Votes");
                 });
 
@@ -797,11 +827,6 @@ namespace BookstoreApp.Data.Migrations
             modelBuilder.Entity("BookstoreApp.Data.Models.Image", b =>
                 {
                     b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCart", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

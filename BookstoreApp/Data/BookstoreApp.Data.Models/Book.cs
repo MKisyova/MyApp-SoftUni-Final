@@ -11,6 +11,7 @@
         public Book()
         {
             this.Genres = new HashSet<BookGenre>();
+            this.ShoppingCarts = new List<ShoppingCartBook>();
         }
 
         public string Title { get; set; }
@@ -37,5 +38,7 @@
         public virtual ICollection<Vote> Votes { get; set; }
 
         public virtual BestsellingBook BestsellingBook { get; set; }
+
+        public virtual ICollection<ShoppingCartBook> ShoppingCarts { get; set; }
     }
 }

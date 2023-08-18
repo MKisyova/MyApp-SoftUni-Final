@@ -4,6 +4,7 @@ using BookstoreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookstoreApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818114439_CreateTableShoppingCart")]
+    partial class CreateTableShoppingCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,6 +271,9 @@ namespace BookstoreApp.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(6,2)");
 
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -284,6 +289,8 @@ namespace BookstoreApp.Data.Migrations
                         .HasFilter("[ImageId] IS NOT NULL");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Books");
                 });
@@ -431,29 +438,6 @@ namespace BookstoreApp.Data.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("ShoppingCarts");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCartBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("ShoppingCartId");
-
-                    b.ToTable("ShoppingCartBooks");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Vote", b =>
@@ -636,6 +620,10 @@ namespace BookstoreApp.Data.Migrations
                         .WithOne("Book")
                         .HasForeignKey("BookstoreApp.Data.Models.Book", "ImageId");
 
+                    b.HasOne("BookstoreApp.Data.Models.ShoppingCart", null)
+                        .WithMany("Books")
+                        .HasForeignKey("ShoppingCartId");
+
                     b.Navigation("Author");
 
                     b.Navigation("Image");
@@ -667,25 +655,6 @@ namespace BookstoreApp.Data.Migrations
                         .HasForeignKey("BookstoreApp.Data.Models.ShoppingCart", "UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BookstoreApp.Data.Models.ShoppingCartBook", b =>
-                {
-                    b.HasOne("BookstoreApp.Data.Models.Book", "Book")
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BookstoreApp.Data.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("Books")
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("BookstoreApp.Data.Models.Vote", b =>
@@ -781,8 +750,6 @@ namespace BookstoreApp.Data.Migrations
                     b.Navigation("BestsellingBook");
 
                     b.Navigation("Genres");
-
-                    b.Navigation("ShoppingCarts");
 
                     b.Navigation("Votes");
                 });

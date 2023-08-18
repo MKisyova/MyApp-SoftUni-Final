@@ -36,5 +36,7 @@ namespace BookstoreApp.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         public virtual ICollection<Vote> Votes { get; set; }
+
+        public virtual ShoppingCart Cart { get; set; }
     }
 }
