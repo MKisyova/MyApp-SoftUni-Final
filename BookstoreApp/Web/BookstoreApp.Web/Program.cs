@@ -73,6 +73,8 @@
             services.AddTransient<IAuthorsService, AuthorsService>();
             services.AddTransient<IGenresService, GenresService>();
             services.AddTransient<IVotesService, VotesService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
+            services.AddTransient<IBestsellingService, BestsellingService>();
         }
 
         private static void Configure(WebApplication app)

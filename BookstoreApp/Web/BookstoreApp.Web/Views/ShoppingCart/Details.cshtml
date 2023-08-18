@@ -1,0 +1,70 @@
+﻿@model BookstoreApp.Web.ViewModels.ShoppingCart.ShoppingCartInputModel
+@{
+	this.ViewData["Title"] = "Shopping Cart";
+}
+
+<h3 class="title text-dark">@this.ViewData["Title"]</h3>
+<hr />
+<div class="row">
+	@foreach (var book in this.Model.Books)
+	{
+@*		<div class="col-md-2">
+			<div class="card mb-4" style="height: 30rem; ">
+				<a asp-controller="Books" asp-action="ById" asp-route-id="@book.Id">
+					<img src="@book.ImageId" class="img-fluid rounded-2 fit">
+				</a>
+				<div class="card-body">
+					<h5 class="card-title">@book.Title</h5>
+					<h6 class="card-subtitle mb-2 text-muted">@book.AuthorName</h6>
+					<h6 class="card-subtitle mb-2 text-danger">@book.Price €</h6>
+				</div>
+				<a asp-action="RemoveFromCart" asp-route-id="@book.Id">
+					<input class="btn btn-primary mt-3" value="Remove from cart" />
+				</a>
+			</div>
+		</div>*@
+
+		<div class="card mb-3" style="max-width: 540px;">
+			<div class="row g-0">
+				<div class="col-md-4">
+					<a asp-controller="Books" asp-action="ById" asp-route-id="@book.BookId">
+						<img src="@book.BookImageId" class="img-fluid rounded-2 fit">
+					</a>
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">@book.BookTitle</h5>
+						<h6 class="card-subtitle mb-2 text-muted">@book.BookAuthorName</h6>
+						<h6 class="card-subtitle mb-2 text-danger">@book.BookPrice €</h6>
+						<a asp-action="RemoveFromCart" asp-route-id="@book.BookId">
+							<input class="btn btn-primary mt-3" value="Remove from cart" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
+<form method="post" class="col-md-6">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<div class="form-group mb-3">
+		<label asp-for="UserEmail"></label>
+		<input asp-for="UserEmail" class="form-control" disabled />
+		<span asp-validation-for="UserEmail" class="text-danger"></span>
+	</div>
+
+	<div class="form-group mb-3">
+		<label asp-for="AddressForDelivery"></label>
+		<input asp-for="AddressForDelivery" class="form-control" />
+		<span asp-validation-for="AddressForDelivery" class="text-danger"></span>
+	</div>
+
+	<p>Dear customers, we do not support card payment yet. Payment will be upon delivery.</p>
+
+	<a asp-action="Checkout">
+		<input type="submit" class="btn btn-primary mt-3" value="Checkout"/>
+	</a>
+</form>
+
