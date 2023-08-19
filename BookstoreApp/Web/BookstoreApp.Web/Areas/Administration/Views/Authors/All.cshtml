@@ -27,9 +27,12 @@
                 <th scope="row">@number</th>
                 <td>@author.Name</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@author.Id">Edit</a> |
-                    <a asp-area="" asp-controller="Authors" asp-action="ById" asp-route-id="@author.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@author.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@author.Id" class="btn btn-warning">Edit</a> |
+                    <a asp-area="" asp-controller="Authors" asp-action="BooksByAuthor" asp-route-id="@author.Id" class="btn btn-primary">Details</a> |
+                    <form method="post" asp-action="Delete" asp-route-id="@author.Id" style="display: inline;">
+                        <input type="submit" class="btn btn-danger" value="Delete"
+                            onclick="return confirm('Are you sure you want to delete the author ' + '@author.Name' + '?');"/>
+                    </form>
                 </td>
             </tr>
         }

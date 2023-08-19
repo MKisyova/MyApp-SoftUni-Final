@@ -13,16 +13,16 @@
     {
         private readonly IDeletableEntityRepository<Author> authorsRepository;
         private readonly IDeletableEntityRepository<Genre> genresRepository;
-        private readonly IDeletableEntityRepository<Book> booksRepository;
+        private readonly IRepository<AuthorGenre> authorGenresRepository;
 
         public AuthorsService(
             IDeletableEntityRepository<Author> authorsRepository,
             IDeletableEntityRepository<Genre> genresRepository,
-            IDeletableEntityRepository<Book> booksRepository)
+            IRepository<AuthorGenre> authorGenresRepository)
         {
             this.authorsRepository = authorsRepository;
             this.genresRepository = genresRepository;
-            this.booksRepository = booksRepository;
+            this.authorGenresRepository = authorGenresRepository;
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllAuthorsAsKeyValuePair()
@@ -61,10 +61,16 @@
             var author = this.authorsRepository.All().FirstOrDefault(x => x.Id == id);
             author.Name = input.Name;
             author.ShortBiography = input.ShortBiography;
+
+            var currentGenres = this.authorGenresRepository.All()
+                .Where(x => x.AuthorId == id);
+            foreach (var genre in currentGenres)
+            {
+                this.authorGenresRepository.Delete(genre);
+            }
+
             if (input.GenreIds != null)
             {
-                author.Genres.Clear();
-
                 foreach (var inputGenreId in input.GenreIds)
                 {
                     var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == inputGenreId);
