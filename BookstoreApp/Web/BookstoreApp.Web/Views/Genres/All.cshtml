@@ -20,7 +20,7 @@
 			bookClass = "fas fa-book-reader";
 		}
 		<div class="col-md-3 mb-2">
-			<a asp-action="BooksByGenreId" asp-route-id="@genre.Id"><i class="@bookClass"></i> @genre.Name</a>
+			<a asp-action="BooksByGenre" asp-route-id="@genre.Id"><i class="@bookClass"></i> @genre.Name</a>
 		</div>
 	}
 </div>

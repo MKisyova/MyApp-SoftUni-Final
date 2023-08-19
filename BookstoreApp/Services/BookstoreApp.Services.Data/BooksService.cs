@@ -181,38 +181,46 @@
             return book;
         }
 
-        public IEnumerable<T> GetByGenreId<T>(int genreId)
+        public IEnumerable<T> GetByGenreId<T>(int genreId, int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Genres.Any(g => g.GenreId == genreId))
-                .To<T>().ToList();
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
 
             return books;
         }
 
-        public IEnumerable<T> GetByGenresFiction<T>()
+        public IEnumerable<T> GetByGenresFiction<T>(int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Genres.Any(g => g.Genre.IsFiction))
-                .To<T>().ToList();
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
 
             return books;
         }
 
-        public IEnumerable<T> GetByGenresNonfiction<T>()
+        public IEnumerable<T> GetByGenresNonfiction<T>(int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Genres.Any(g => g.Genre.IsFiction == false))
-                .To<T>().ToList();
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
 
             return books;
         }
 
-        public IEnumerable<T> GetByAuthorId<T>(int authorId)
+        public IEnumerable<T> GetByAuthorId<T>(int authorId, int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
                 .Where(x => x.AuthorId == authorId)
-                .To<T>().ToList();
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
 
             return books;
         }

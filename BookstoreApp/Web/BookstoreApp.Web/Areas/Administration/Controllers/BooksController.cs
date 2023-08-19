@@ -97,7 +97,18 @@
                 return this.View(input);
             }
 
-            await this.booksService.UpdateAsync(id, input, $"{this.environment.WebRootPath}/images");
+            try
+            {
+                await this.booksService.UpdateAsync(id, input, $"{this.environment.WebRootPath}/images");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
+                return this.View(input);
+            }
+
             this.TempData["Message"] = "Book updated successfully.";
 
             return this.RedirectToAction(nameof(this.All));

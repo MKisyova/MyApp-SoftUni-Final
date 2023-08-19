@@ -38,33 +38,37 @@
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCountByGenresFiction(),
                 Genres = this.genresService.GetAllFiction<SingleGenreViewModel>(),
-                Books = this.booksService.GetByGenresFiction<SmallBookViewModel>(),
+                Books = this.booksService.GetByGenresFiction<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);
         }
 
-        public IActionResult Nonfiction()
+        public IActionResult Nonfiction(int pageNumber = 1)
         {
             var viewModel = new NonfictionGenresViewModel
             {
+                ActionName = nameof(this.Nonfiction),
+                ItemsPerPage = GlobalConstants.ItemsPerPage,
+                PageNumber = pageNumber,
+                TotalItemsCount = this.booksService.GetCountByGenresFiction(),
                 Genres = this.genresService.GetAllNonfiction<SingleGenreViewModel>(),
-                Books = this.booksService.GetByGenresNonfiction<SmallBookViewModel>(),
+                Books = this.booksService.GetByGenresNonfiction<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);
         }
 
-        public IActionResult BooksByGenreId(int id, int pageNumber = 1)
+        public IActionResult BooksByGenre(int id, int pageNumber = 1)
         {
             var viewModel = new BooksByGenreViewModel
             {
-                ActionName = nameof(this.BooksByGenreId),
+                ActionName = nameof(this.BooksByGenre),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCountByGenreId(id),
                 Genre = this.genresService.GetById<SingleGenreViewModel>(id),
-                Books = this.booksService.GetByGenreId<SmallBookViewModel>(id),
+                Books = this.booksService.GetByGenreId<SmallBookViewModel>(id, pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);

@@ -3,7 +3,6 @@
     using System.Linq;
 
     using BookstoreApp.Common;
-    using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Data;
     using BookstoreApp.Web.ViewModels.Authors;
     using BookstoreApp.Web.ViewModels.Books;
@@ -50,7 +49,7 @@
                 PageNumber = pageNumber,
                 TotalItemsCount = this.booksService.GetCountByAuthorId(id),
                 Author = this.authorsService.GetById<SingleAuthorViewModel>(id),
-                Books = this.booksService.GetByAuthorId<SmallBookViewModel>(id),
+                Books = this.booksService.GetByAuthorId<SmallBookViewModel>(id, pageNumber, GlobalConstants.ItemsPerPage),
             };
 
             return this.View(viewModel);

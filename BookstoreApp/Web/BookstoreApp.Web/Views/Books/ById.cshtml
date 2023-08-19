@@ -37,7 +37,7 @@
 					<dt class="col-4">Genres:</dt>
 					@foreach (var genre in this.Model.Genres)
 					{
-						<dd class="col-8"><a asp-controller="Genres" asp-action="BooksByGenreId" asp-route-id="@genre.GenreId">@genre.GenreName</a></dd>
+						<dd class="col-8"><a asp-controller="Genres" asp-action="BooksByGenre" asp-route-id="@genre.GenreId">@genre.GenreName</a></dd>
 						<dt class="col-4"></dt>
 					}
 				</dl>

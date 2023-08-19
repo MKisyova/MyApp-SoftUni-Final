@@ -13,13 +13,13 @@
 
         IEnumerable<T> GetAllRandom<T>(int page, int itemsPerPage);
 
-        IEnumerable<T> GetByAuthorId<T>(int authorId);
+        IEnumerable<T> GetByAuthorId<T>(int authorId, int page, int itemsPerPage);
 
-        IEnumerable<T> GetByGenreId<T>(int genreId);
+        IEnumerable<T> GetByGenreId<T>(int genreId, int page, int itemsPerPage);
 
-        IEnumerable<T> GetByGenresFiction<T>();
+        IEnumerable<T> GetByGenresFiction<T>(int page, int itemsPerPage);
 
-        IEnumerable<T> GetByGenresNonfiction<T>();
+        IEnumerable<T> GetByGenresNonfiction<T>(int page, int itemsPerPage);
 
         IEnumerable<T> GetAllNewBooks<T>(int page, int itemsPerPage);
 

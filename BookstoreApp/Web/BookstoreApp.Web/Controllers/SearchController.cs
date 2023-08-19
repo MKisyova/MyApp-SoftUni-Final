@@ -16,8 +16,6 @@
 
         public IActionResult Index()
         {
-            //var viewModel = new SearchInputModel();
-
             return this.View();
         }
 
