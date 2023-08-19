@@ -27,26 +27,21 @@
 
         public async Task CreateAsync(string userId)
         {
-            var shoppingCart = this.shoppingCartRepository.All()
-            .FirstOrDefault(x => x.UserId == userId);
-
-            if (shoppingCart == null)
+            var shoppingCart = new ShoppingCart
             {
-                shoppingCart = new ShoppingCart
-                {
-                    UserId = userId,
-                };
+                UserId = userId,
+            };
 
-                await this.shoppingCartRepository.AddAsync(shoppingCart);
-                await this.shoppingCartRepository.SaveChangesAsync();
-            }
+            await this.shoppingCartRepository.AddAsync(shoppingCart);
+            await this.shoppingCartRepository.SaveChangesAsync();
         }
 
         public T GetCartByUserId<T>(string userId)
         {
             var cart = this.shoppingCartRepository.AllAsNoTracking()
                 .Where(x => x.UserId == userId)
-                .To<T>().FirstOrDefault();
+                .OrderBy(x => x.Id)
+                .To<T>().LastOrDefault();
 
             return cart;
         }

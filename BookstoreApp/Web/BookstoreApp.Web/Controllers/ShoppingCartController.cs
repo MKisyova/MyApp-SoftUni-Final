@@ -54,8 +54,10 @@
 
             await this.shoppingCartService.GetCart(id, input);
             await this.bestsellingService.IncreaseBestsellingBooksValue(input.BookIds);
+            var user = await this.userManager.GetUserAsync(this.User);
+            await this.shoppingCartService.CreateAsync(user.Id);
 
-            this.TempData["Message"] = "Order successfully placed.";
+            this.TempData["Message"] = "Order placed successfully.";
 
             return this.RedirectToAction("All", "Books");
         }

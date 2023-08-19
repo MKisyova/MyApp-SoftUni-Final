@@ -39,6 +39,8 @@
 
         int GetCountByTopRated();
 
+        int GetCountBySalesCount();
+
         int GetCount();
 
         Task CreateAsync(CreateBookInputModel input, string imagePath);

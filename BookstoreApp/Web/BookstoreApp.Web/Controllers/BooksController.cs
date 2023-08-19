@@ -57,7 +57,7 @@
                 ActionName = nameof(this.Bestsellers),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
-                TotalItemsCount = this.booksService.GetCount(),
+                TotalItemsCount = this.booksService.GetCountBySalesCount(),
                 Books = this.booksService
                 .GetBySalesCount<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };

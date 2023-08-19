@@ -238,6 +238,7 @@
         public IEnumerable<T> GetBySalesCount<T>(int page, int itemsPerPage)
         {
             var books = this.booksRepository.AllAsNoTracking()
+                .Where(x => x.BestsellingBook.SalesCount > 0)
                 .OrderByDescending(x => x.BestsellingBook.SalesCount)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>().ToList();
@@ -260,6 +261,13 @@
         {
             return this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Votes.Count() > 0)
+                .Count();
+        }
+
+        public int GetCountBySalesCount()
+        {
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.BestsellingBook.SalesCount > 0)
                 .Count();
         }
 
