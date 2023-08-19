@@ -1,5 +1,6 @@
 ﻿namespace BookstoreApp.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -50,27 +51,19 @@
             return cart;
         }
 
-        public async Task GetCart(ShoppingCartInputModel input, string userId)
+        public async Task GetCart(int id, ShoppingCartInputModel input)
         {
             var shoppingCart = this.shoppingCartRepository.All()
-            .FirstOrDefault(x => x.UserId == userId);
+            .FirstOrDefault(x => x.Id == id);
 
-            // if (shoppingCart == null)
-            // {
-            //    shoppingCart = new ShoppingCart
-            //    {
-            //        UserId = userId,
-            //    };
-            //    await this.shoppingCartRepository.AddAsync(shoppingCart);
-            // }
             shoppingCart.AddressForDelivery = input.AddressForDelivery;
-            foreach (var bookId in input.BookIds)
-            {
-                var book = this.booksRepository.AllAsNoTracking()
-                .Where(x => x.Id == bookId)
-                .FirstOrDefault();
+            var booksInCart = this.bookShoppingCartRepository.AllAsNoTracking()
+                .Where(x => x.ShoppingCartId == input.Id)
+                .Select(x => x.BookId);
 
-                shoppingCart.Books.Add(new ShoppingCartBook { Book = book });
+            foreach (var bookId in booksInCart)
+            {
+                input.BookIds.Add(bookId);
             }
 
             await this.shoppingCartRepository.SaveChangesAsync();

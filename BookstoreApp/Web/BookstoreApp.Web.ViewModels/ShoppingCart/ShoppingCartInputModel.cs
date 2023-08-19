@@ -5,18 +5,22 @@
 
     using BookstoreApp.Data.Models;
     using BookstoreApp.Services.Mapping;
-    using BookstoreApp.Web.ViewModels.Books;
 
     public class ShoppingCartInputModel : IMapFrom<ShoppingCart>
     {
-        public string UserId { get; set; }
+        public ShoppingCartInputModel()
+        {
+            this.BookIds = new List<int>();
+        }
+
+        public int Id { get; set; }
 
         [Display(Name = "User email address")]
         public string UserEmail { get; set; }
 
         public ICollection<BookViewModel> Books { get; set; }
 
-        public IEnumerable<int> BookIds { get; set; }
+        public ICollection<int> BookIds { get; set; }
 
         [Required]
         [Display(Name = "Address for delivery")]

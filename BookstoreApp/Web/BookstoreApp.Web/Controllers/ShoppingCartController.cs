@@ -45,15 +45,14 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(ShoppingCartInputModel input)
+        public async Task<IActionResult> Checkout(int id, ShoppingCartInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(input);
+                return this.View(nameof(this.Details), input);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            await this.shoppingCartService.GetCart(input, user.Id);
+            await this.shoppingCartService.GetCart(id, input);
             await this.bestsellingService.IncreaseBestsellingBooksValue(input.BookIds);
 
             this.TempData["Message"] = "Order successfully placed.";

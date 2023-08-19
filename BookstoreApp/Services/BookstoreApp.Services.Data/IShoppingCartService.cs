@@ -10,7 +10,7 @@
 
         Task CreateAsync(string userId);
 
-        Task GetCart(ShoppingCartInputModel input, string userId);
+        Task GetCart(int id, ShoppingCartInputModel input);
 
         Task AddToCartAsync(string userId, BookIdViewModel model);
 
