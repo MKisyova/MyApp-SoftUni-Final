@@ -4,7 +4,7 @@ BookstoreApp is a website for books. Users can view all listed books , authors a
 
 When a book is opened, the user can see all the information about it. Information about the author is also included below it. Also, the user can see the genres to which the book belongs and can click on any genre and will be redirected to all books of the selected genre.
 
-If a user wants to vote for a book, they must register and log in to the website.
+If a user wants to vote for a book or add a book to their shopping cart, they must register and log in to the website. In the shopping cart, the user can see all the books he has added to it and remove some of them if he wishes.
  
 Administrators can create, edit and delete books, authors and genres. For their convenience, the content appears divided into tables where they can select the operation they want to perform or simply check everything that is available on the site. 
 
