@@ -1,14 +1,48 @@
 ﻿@model BookstoreApp.Web.ViewModels.Administration.Books.EditBookInputModel
 @{
 	this.ViewData["Title"] = "Edit book";
+	var genres = this.Model.GenresItems.Select(x => new SelectListItem(x.Value, x.Key));
+	var selectedGenres = this.Model.Genres.Select(x => new SelectListItem(x.GenreName, x.GenreId.ToString()));
 }
 
 <h3>@this.ViewData["Title"]</h3>
 
-<form method="post" class="col-md-6">
+<form method="post" class="col-md-6" enctype="multipart/form-data">
 	<div asp-validation-summary="All" class="text-danger"></div>
 	<input type="hidden" asp-for="Id" />
 	<partial name="_CreateEditBookPartial" model="@Model" />
+
+	<div class="form-group mb-3">
+		<label asp-for="GenreIds"></label>
+		<select asp-for="GenreIds" class="form-control" multiple>
+			@foreach (var genre in selectedGenres)
+			{
+				<option selected value="@genre.Value">@genre.Text</option>
+			}
+			@foreach (var genre in genres)
+			{
+				if (!selectedGenres.Any(x => x.Value == genre.Value))
+				{
+					<option value="@genre.Value">@genre.Text</option>
+				}
+			}
+		</select>
+		<span asp-validation-for="GenreIds" class="text-danger"></span>
+	</div>
+	<div class="form-group mb-3">
+		<label asp-for="ImageCover"></label>
+		<input asp-for="ImageCover" class="form-control" />
+		<span asp-validation-for="ImageCover" class="text-danger"></span>
+	</div>
+
+	<div>
+		<p>Current image:</p>
+		@if (string.IsNullOrEmpty(Model.ImageId))
+		{
+			<p>There is no image uploaded for this book.</p>
+		}
+		<img src="@Model.ImageId" class="img-fluid rounded-2 fit">
+	</div>
 
 	<button type="submit" class="btn btn-primary mt-3">Update</button>
 </form>

@@ -16,13 +16,19 @@
     {
         private readonly IDeletableEntityRepository<Book> booksRepository;
         private readonly IDeletableEntityRepository<Genre> genresRepository;
+        private readonly IRepository<BookGenre> bookGenresRepository;
+        private readonly IDeletableEntityRepository<Image> imageRepository;
 
         public BooksService(
             IDeletableEntityRepository<Book> booksRepository,
-            IDeletableEntityRepository<Genre> genresRepository)
+            IDeletableEntityRepository<Genre> genresRepository,
+            IRepository<BookGenre> bookGenresRepository,
+            IDeletableEntityRepository<Image> imageRepository)
         {
             this.booksRepository = booksRepository;
             this.genresRepository = genresRepository;
+            this.bookGenresRepository = bookGenresRepository;
+            this.imageRepository = imageRepository;
         }
 
         public async Task CreateAsync(CreateBookInputModel input, string imagePath)
@@ -46,32 +52,14 @@
                 }
             }
 
-            Directory.CreateDirectory($"{imagePath}/books/");
-            Stream fileStream = await this.AddImage(input, imagePath, book);
+            if (input.ImageCover != null)
+            {
+                Directory.CreateDirectory($"{imagePath}/books/");
+                Stream fileStream = await this.AddImage(input, imagePath, book);
+            }
 
             await this.booksRepository.AddAsync(book);
             await this.booksRepository.SaveChangesAsync();
-        }
-
-        private async Task<Stream> AddImage(BaseBookInputModel input, string imagePath, Book book)
-        {
-            var extension = Path.GetExtension(input.Image.FileName).TrimStart('.');
-            if (!GlobalConstants.AllowedExtensions.Any(x => extension.EndsWith(x)))
-            {
-                throw new Exception($"Invalid image extension {extension}");
-            }
-
-            var image = new Image
-            {
-                Book = book,
-                Extension = extension,
-            };
-            book.Image = image;
-
-            var physicalPath = $"{imagePath}/books/{image.Id}.{extension}";
-            Stream fileStream = new FileStream(physicalPath, FileMode.Create);
-            await input.Image.CopyToAsync(fileStream);
-            return fileStream;
         }
 
         public async Task UpdateAsync(int id, EditBookInputModel input, string imagePath)
@@ -82,15 +70,23 @@
             book.YearPublished = input.YearPublished;
             book.Pages = input.Pages;
             book.Price = input.Price;
-            if (input.Image != null)
+            book.Description = input.Description;
+
+            if (input.ImageCover != null)
             {
+                Directory.CreateDirectory($"{imagePath}/books/");
                 Stream fileStream = await this.AddImage(input, imagePath, book);
+            }
+
+            var currentGenres = this.bookGenresRepository.All()
+                .Where(x => x.BookId == id);
+            foreach (var genre in currentGenres)
+            {
+                this.bookGenresRepository.Delete(genre);
             }
 
             if (input.GenreIds != null)
             {
-                book.Genres.Clear();
-
                 foreach (var inputGenreId in input.GenreIds)
                 {
                     var genre = this.genresRepository.All().FirstOrDefault(x => x.Id == inputGenreId);
@@ -98,8 +94,6 @@
                 }
             }
 
-            // book.ImageId = input.Image;
-            // book.Genres = input.GenreIds;
             await this.booksRepository.SaveChangesAsync();
         }
 
@@ -259,6 +253,27 @@
             return this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Votes.Count() > 0)
                 .Count();
+        }
+
+        private async Task<Stream> AddImage(BaseBookInputModel input, string imagePath, Book book)
+        {
+            var extension = Path.GetExtension(input.ImageCover.FileName).TrimStart('.');
+            if (!GlobalConstants.AllowedExtensions.Any(x => extension.EndsWith(x)))
+            {
+                throw new Exception($"Invalid image extension {extension}");
+            }
+
+            var image = new Image
+            {
+                Book = book,
+                Extension = extension,
+            };
+            book.Image = image;
+
+            var physicalPath = $"{imagePath}/books/{image.Id}.{extension}";
+            Stream fileStream = new FileStream(physicalPath, FileMode.Create);
+            await input.ImageCover.CopyToAsync(fileStream);
+            return fileStream;
         }
     }
 }

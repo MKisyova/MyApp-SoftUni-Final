@@ -35,9 +35,12 @@
                 <td>@book.YearPublished</td>
                 <td>@book.Price</td>               
                 <td>
-                    <a asp-action="Edit" asp-route-id="@book.Id">Edit</a> |
-                    <a asp-area="" asp-controller="Books" asp-action="ById" asp-route-id="@book.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
+                    <a asp-area="" asp-controller="Books" asp-action="ById" asp-route-id="@book.Id" class="btn btn-primary">Details</a>
+                    <form method="post" asp-action="Delete" asp-route-id="@book.Id" style="display: inline;">
+                        <input type="submit" class="btn btn-danger" value="Delete"
+                           onclick="return confirm('Are you sure you want to delete the book ' + '@book.Title' + '?');" />
+                    </form>
                 </td>
             </tr>
         }
