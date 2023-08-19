@@ -47,7 +47,7 @@
         {
             var model = new CreateBookInputModel();
             model.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
-            model.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+            model.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
 
             return this.View(model);
         }
@@ -58,7 +58,7 @@
             if (!this.ModelState.IsValid)
             {
                 input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
-                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -70,7 +70,7 @@
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
                 input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
-                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -81,7 +81,7 @@
         public IActionResult Edit(int id)
         {
             var input = this.booksService.GetById<EditBookInputModel>(id);
-            input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+            input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
             input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
 
             return this.View(input);
@@ -92,7 +92,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                input.Genres = this.genresService.GetAllGenresAsKeyValuePair();
+                input.GenresItems = this.genresService.GetAllGenresAsKeyValuePair();
                 input.Authors = this.authorsService.GetAllAuthorsAsKeyValuePair();
                 return this.View(input);
             }
