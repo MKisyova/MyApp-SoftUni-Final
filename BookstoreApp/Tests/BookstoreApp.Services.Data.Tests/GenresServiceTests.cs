@@ -93,6 +93,17 @@
             Assert.Equal(expectedResult, service.GetById<SingleGenreViewModel>(id).Id);
         }
 
+        [Fact]
+        public void GetAllGenresAsKeyValuePairShouldReturnAllAsKeyValuePair()
+        {
+            GenresService service = this.MockService(this.TestData());
+            var expectedResult = this.TestData()
+                .OrderBy(g => g.Name)
+                .Select(g => new KeyValuePair<string, string>(g.Id.ToString(), g.Name));
+
+            Assert.Equal(expectedResult, service.GetAllGenresAsKeyValuePair());
+        }
+
         private List<Genre> TestData()
         {
             return new List<Genre>
@@ -126,12 +137,12 @@
 
         private GenresService MockService(List<Genre> genres)
         {
-            var mockVotesRepo = new Mock<IDeletableEntityRepository<Genre>>();
-            mockVotesRepo.Setup(x => x.AllAsNoTracking()).Returns(genres.AsQueryable);
+            var mockGenresRepo = new Mock<IDeletableEntityRepository<Genre>>();
+            mockGenresRepo.Setup(x => x.AllAsNoTracking()).Returns(genres.AsQueryable);
 
             // mockVotesRepo.Setup(x => x.AddAsync(It.IsAny<Genre>()))
             //    .Callback((Genre genre) => genres.Add(genre));
-            var service = new GenresService(mockVotesRepo.Object);
+            var service = new GenresService(mockGenresRepo.Object);
             return service;
         }
     }
