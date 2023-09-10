@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
 
     using BookstoreApp.Data.Common.Repositories;
     using BookstoreApp.Data.Models;
@@ -36,7 +37,7 @@
             var mockRepoAuthors = new Mock<IDeletableEntityRepository<Author>>();
             mockRepoAuthors.Setup(x => x.AllAsNoTracking())
                 .Returns(this.TestData()
-                .Where(g => g.Id == id).AsQueryable);
+                .Where(a => a.Id == id).AsQueryable);
             var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
             var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
 
@@ -74,10 +75,49 @@
         {
             AuthorsService service = this.MockService(this.TestData());
             var expectedResult = this.TestData()
-                .OrderBy(g => g.Name)
-                .Select(g => new KeyValuePair<string, string>(g.Id.ToString(), g.Name));
+                .OrderBy(a => a.Name)
+                .Select(a => new KeyValuePair<string, string>(a.Id.ToString(), a.Name));
 
             Assert.Equal(expectedResult, service.GetAllAuthorsAsKeyValuePair());
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteAuthorSuccessfully()
+        {
+            var authorId = 1;
+            var authors = new List<Author>()
+            {
+                new Author
+                {
+                    Id = 1,
+                    Name = "Ana",
+                },
+                new Author
+                {
+                    Id = 2,
+                    Name = "Maria",
+                },
+            };
+
+            var mockRepoAuthors = new Mock<IDeletableEntityRepository<Author>>();
+            mockRepoAuthors.Setup(x => x.All())
+                .Returns(authors.AsQueryable);
+            mockRepoAuthors.Setup(x => x.Delete(It.IsAny<Author>()))
+                .Callback((Author author) => authors.Remove(author));
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
+
+            var service = new AuthorsService(
+               mockRepoAuthors.Object,
+               mockRepoGenres.Object,
+               mockRepoAuthorsGenres.Object);
+
+            await service.DeleteAsync(authorId);
+
+            Assert.Single(authors);
+            Assert.DoesNotContain(authors, author => author.Id == authorId);
+            mockRepoAuthors.Verify(x => x.SaveChangesAsync(), Times.Once);
+            mockRepoAuthors.Verify(x => x.Delete(It.IsAny<Author>()), Times.Once);
         }
 
         private List<Author> TestData()
@@ -116,7 +156,10 @@
 
             // mockVotesRepo.Setup(x => x.AddAsync(It.IsAny<Genre>()))
             //    .Callback((Genre genre) => genres.Add(genre));
-            var service = new AuthorsService(mockRepoAuthors.Object, mockRepoGenres.Object, mockRepoAuthorsGenres.Object);
+            var service = new AuthorsService(
+                mockRepoAuthors.Object,
+                mockRepoGenres.Object,
+                mockRepoAuthorsGenres.Object);
             return service;
         }
     }
