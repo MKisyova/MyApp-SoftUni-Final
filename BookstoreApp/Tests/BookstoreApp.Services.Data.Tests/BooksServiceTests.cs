@@ -53,6 +53,27 @@
 
         [Theory]
         [InlineData(1, 1)]
+        [InlineData(2, 1)]
+        [InlineData(3, 1)]
+        public void GetCountByGenreIdShouldReturnTheBooksCountWithTheGivenGenreId(int genreId, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(b => b.Genres.Any(g => g.GenreId == genreId)).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetCountByGenreId(genreId));
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
         [InlineData(2, 2)]
         [InlineData(3, 3)]
         public void GetByIdShouldReturnTheCorrectId(int id, int expectedResult)
@@ -118,7 +139,7 @@
 
         private List<Book> TestData()
         {
-            return new List<Book>
+            var books = new List<Book>
             {
                 new Book
                 {
@@ -165,6 +186,22 @@
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 1),
                 },
             };
+
+            int genreId = 1;
+            foreach (var book in books)
+            {               
+                var genre = this.TestDataGenres().FirstOrDefault(x => x.Id == genreId);
+                book.Genres.Add(new BookGenre
+                {
+                    Book = book,
+                    BookId = book.Id,
+                    Genre = genre,
+                    GenreId = genre.Id,
+                });
+                genreId++;
+            }
+
+            return books;
         }
 
         private List<Author> TestDataAuthors()
@@ -190,6 +227,37 @@
                 {
                     Id = 4,
                     Name = "Stoyan",
+                },
+            };
+        }
+
+        private List<Genre> TestDataGenres()
+        {
+            return new List<Genre>
+            {
+                new Genre
+                {
+                    Id = 1,
+                    Name = "Action",
+                    IsFiction = true,
+                },
+                new Genre
+                {
+                    Id = 2,
+                    Name = "Horror",
+                    IsFiction = true,
+                },
+                new Genre
+                {
+                    Id = 3,
+                    Name = "Travel",
+                    IsFiction = false,
+                },
+                new Genre
+                {
+                    Id = 4,
+                    Name = "Philosophy",
+                    IsFiction = false,
                 },
             };
         }
