@@ -72,6 +72,42 @@
             Assert.Equal(expectedResult, service.GetCountByGenreId(genreId));
         }
 
+        [Fact]
+        public void GetCountByGenreFictionShouldReturnTheBooksCountWithGenreFiction()
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(b => b.Genres.Any(g => g.Genre.IsFiction)).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(2, service.GetCountByGenresFiction());
+        }
+
+        [Fact]
+        public void GetCountByGenreNonFictionShouldReturnTheBooksCountWithGenreNonFiction()
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(b => b.Genres.Any(g => g.Genre.IsFiction == false)).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(2, service.GetCountByGenresNonFiction());
+        }
+
         [Theory]
         [InlineData(1, 1)]
         [InlineData(2, 2)]
@@ -137,6 +173,50 @@
             Assert.Equal(expectedResultBooksPerPage, service.GetAllNewBooks<SingleBookInTableViewModel>(page, itemsPerPage).Count());
         }
 
+        [Theory]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 3, 2)]
+        [InlineData(1, 4, 2)]
+        public void GetByGenresFictionShouldReturnAllBooksWithGenresFiction(int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction))
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetByGenresFiction<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+        }
+
+        [Theory]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 3, 2)]
+        [InlineData(1, 4, 2)]
+        public void GetByGenresNonFictionShouldReturnAllBooksWithGenresNonFiction(int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction == false))
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetByGenresNonfiction<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+        }
+
         private List<Book> TestData()
         {
             var books = new List<Book>
@@ -189,7 +269,7 @@
 
             int genreId = 1;
             foreach (var book in books)
-            {               
+            {
                 var genre = this.TestDataGenres().FirstOrDefault(x => x.Id == genreId);
                 book.Genres.Add(new BookGenre
                 {
