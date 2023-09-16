@@ -82,7 +82,7 @@
         [InlineData(1, 1)]
         [InlineData(2, 2)]
         [InlineData(3, 3)]
-        public void GetByIdShouldReturnTheCorrectId(int id, int expectedResult)
+        public void GetByIdShouldReturnTheCorrectGenreById(int id, int expectedResult)
         {
             var mockGenresRepo = new Mock<IDeletableEntityRepository<Genre>>();
             mockGenresRepo.Setup(x => x.AllAsNoTracking())
