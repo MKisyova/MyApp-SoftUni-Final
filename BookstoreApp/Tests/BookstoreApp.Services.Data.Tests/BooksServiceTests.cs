@@ -112,7 +112,7 @@
         [InlineData(1, 1)]
         [InlineData(2, 2)]
         [InlineData(3, 3)]
-        public void GetByIdShouldReturnTheCorrectId(int id, int expectedResult)
+        public void GetByIdShouldReturnTheCorrectBookById(int id, int expectedResult)
         {
             var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
             mockRepoBooks.Setup(x => x.AllAsNoTracking())
@@ -215,6 +215,27 @@
                mockRepoBooksGenres.Object);
 
             Assert.Equal(expectedResult, service.GetByGenresNonfiction<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+        }
+
+        [Theory]
+        [InlineData("1", new[] { "1" })]
+        [InlineData("Ana", new[] { "1", "4" })]
+        [InlineData("2", new[] { "2" })]
+        public void GetByKeywordShouldReturnAllBooksWithTheGivenKeyword(string keyword, string[] expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Title.Contains(keyword) || x.Author.Name.Contains(keyword)).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetByKeyword<SingleBookInTableViewModel>(keyword).Select(x => x.Title));
         }
 
         private List<Book> TestData()
