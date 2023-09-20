@@ -17,18 +17,15 @@
         private readonly IDeletableEntityRepository<Book> booksRepository;
         private readonly IDeletableEntityRepository<Genre> genresRepository;
         private readonly IRepository<BookGenre> bookGenresRepository;
-        private readonly IDeletableEntityRepository<Image> imageRepository;
 
         public BooksService(
             IDeletableEntityRepository<Book> booksRepository,
             IDeletableEntityRepository<Genre> genresRepository,
-            IRepository<BookGenre> bookGenresRepository,
-            IDeletableEntityRepository<Image> imageRepository)
+            IRepository<BookGenre> bookGenresRepository)
         {
             this.booksRepository = booksRepository;
             this.genresRepository = genresRepository;
             this.bookGenresRepository = bookGenresRepository;
-            this.imageRepository = imageRepository;
         }
 
         public async Task CreateAsync(CreateBookInputModel input, string imagePath)
@@ -169,6 +166,13 @@
         {
             return this.booksRepository.AllAsNoTracking()
                 .Where(x => x.Genres.Any(g => g.Genre.IsFiction))
+                .Count();
+        }
+
+        public int GetCountByGenresNonFiction()
+        {
+            return this.booksRepository.AllAsNoTracking()
+                .Where(x => x.Genres.Any(g => g.Genre.IsFiction == false))
                 .Count();
         }
 

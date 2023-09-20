@@ -37,6 +37,8 @@
 
         int GetCountByGenresFiction();
 
+        int GetCountByGenresNonFiction();
+
         int GetCountByTopRated();
 
         int GetCountBySalesCount();

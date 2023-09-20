@@ -51,7 +51,7 @@
                 ActionName = nameof(this.Nonfiction),
                 ItemsPerPage = GlobalConstants.ItemsPerPage,
                 PageNumber = pageNumber,
-                TotalItemsCount = this.booksService.GetCountByGenresFiction(),
+                TotalItemsCount = this.booksService.GetCountByGenresNonFiction(),
                 Genres = this.genresService.GetAllNonfiction<SingleGenreViewModel>(),
                 Books = this.booksService.GetByGenresNonfiction<SmallBookViewModel>(pageNumber, GlobalConstants.ItemsPerPage),
             };
