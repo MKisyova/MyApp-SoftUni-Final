@@ -60,6 +60,9 @@
 <form method="post" id="antiForgeryForm"></form>
 @section Scripts {
     <script>
+		$(document).ready(function () {
+			setStars();
+		});
 		$("i[data-vote]").each(function (el) {
             $(this).click(function () {
                 var value = $(this).attr("data-vote");
@@ -75,11 +78,31 @@
                     },
                     success: function (data) {
                         $('#averageVoteValue').html(data.averageVote.toFixed(1));
+						setStars();
                     },
                     contentType: 'application/json',
-                });
+                });				
             })
         });
+
+		function setStars(){
+			let averageVote = Number(document.getElementById("averageVoteValue").textContent);
+			let elementsWithStars = Array.from(document.querySelectorAll('[data-vote]'));
+
+			for (i = 0; i < elementsWithStars.length; i++) {
+				let elementWithStar = elementsWithStars[i];
+				let voteValue = elementWithStar.dataset.vote;
+				if (voteValue > averageVote) {
+					elementWithStar.classList.value = "far fa-star";
+				} else {
+					elementWithStar.classList.value = "fa fa-star";
+				}
+			}
+			if (!Number.isInteger(averageVote)) {
+				let elementWithHalfStar = elementsWithStars.find(el => el.dataset.vote == Math.ceil(averageVote))
+				elementWithHalfStar.classList.value = "fas fa-star-half-alt";
+			}
+		}
     </script>
 }
 
