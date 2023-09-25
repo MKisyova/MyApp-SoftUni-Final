@@ -218,6 +218,50 @@
         }
 
         [Theory]
+        [InlineData(1, 1, 2, 1)]
+        [InlineData(1, 1, 3, 1)]
+        [InlineData(2, 1, 4, 1)]
+        public void GetByGenreIdShouldReturnAllBooksWithTheGivenGenreId(int genreId, int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Genres.Any(g => g.GenreId == genreId))
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetByGenreId<SingleBookInTableViewModel>(genreId, page, itemsPerPage).Count());
+        }
+
+        [Theory]
+        [InlineData(1, 1, 2, 2)]
+        [InlineData(2, 1, 3, 1)]
+        [InlineData(3, 1, 4, 1)]
+        public void GetByAuthorIdShouldReturnAllBooksWithTheGivenAuthorId(int authorId, int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.AuthorId == authorId)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(expectedResult, service.GetByAuthorId<SingleBookInTableViewModel>(authorId, page, itemsPerPage).Count());
+        }
+
+        [Theory]
         [InlineData("1", new[] { "1" })]
         [InlineData("Ana", new[] { "1", "4" })]
         [InlineData("2", new[] { "2" })]
