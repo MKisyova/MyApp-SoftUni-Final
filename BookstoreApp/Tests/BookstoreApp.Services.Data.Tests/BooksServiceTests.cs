@@ -1,5 +1,6 @@
 ﻿namespace BookstoreApp.Services.Data.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -9,8 +10,6 @@
     using BookstoreApp.Services.Mapping;
     using BookstoreApp.Web.ViewModels;
     using BookstoreApp.Web.ViewModels.Administration.Books;
-    using BookstoreApp.Web.ViewModels.Authors;
-    using BookstoreApp.Web.ViewModels.Books;
     using BookstoreApp.Web.ViewModels.ShoppingCart;
     using Moq;
     using Xunit;
@@ -148,6 +147,76 @@
                mockRepoBooksGenres.Object);
 
             Assert.Equal(expectedResult, service.GetAll<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+        }
+
+        [Theory]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 3, 3)]
+        [InlineData(1, 4, 4)]
+        public void GetAllRandomShouldReturnAllBooksInRandomOrder(int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .OrderBy(x => Guid.NewGuid())
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            var getAllRandomCalledFirstTime = service.GetAllRandom<SingleBookInTableViewModel>(page, itemsPerPage).ToArray();
+            var getAllRandomCalledSecondTime = service.GetAllRandom<SingleBookInTableViewModel>(page, itemsPerPage).ToArray();
+            var resultFromGetAllRandomIsAlwaysDifferent = false;
+
+            for (int i = 0; i < getAllRandomCalledFirstTime.Count(); i++)
+            {
+                if (getAllRandomCalledFirstTime[i].Id != getAllRandomCalledSecondTime[i].Id)
+                {
+                    resultFromGetAllRandomIsAlwaysDifferent = true;
+                }
+            }
+
+            Assert.True(resultFromGetAllRandomIsAlwaysDifferent);
+            Assert.Equal(expectedResult, service.GetAllRandom<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+        }
+
+        [Theory]
+        [InlineData(2, 2)]
+        [InlineData(3, 3)]
+        [InlineData(4, 4)]
+        public void GetBookForHomePageShouldReturnTheGivenCountOfBooksInRandomOrder(int booksCount, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .OrderBy(x => Guid.NewGuid())
+                .Take(booksCount).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            var getBookForHomePageCalledFirstTime = service.GetBookForHomePage<SingleBookInTableViewModel>(booksCount).ToArray();
+            var getBookForHomePageCalledSecondTime = service.GetBookForHomePage<SingleBookInTableViewModel>(booksCount).ToArray();
+            var resultFromBookForHomePageIsAlwaysDifferent = false;
+
+            for (int i = 0; i < getBookForHomePageCalledFirstTime.Count(); i++)
+            {
+                if (getBookForHomePageCalledFirstTime[i].Id != getBookForHomePageCalledSecondTime[i].Id)
+                {
+                    resultFromBookForHomePageIsAlwaysDifferent = true;
+                }
+            }
+
+            Assert.True(resultFromBookForHomePageIsAlwaysDifferent);
+            Assert.Equal(expectedResult, service.GetBookForHomePage<SingleBookInTableViewModel>(booksCount).Count());
         }
 
         [Theory]
