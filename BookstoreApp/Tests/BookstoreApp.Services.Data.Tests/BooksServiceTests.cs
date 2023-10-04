@@ -351,6 +351,54 @@
             Assert.Equal(expectedResult, service.GetByKeyword<SingleBookInTableViewModel>(keyword).Select(x => x.Title));
         }
 
+        [Theory]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 3, 3)]
+        [InlineData(1, 4, 3)]
+        public void GetBySalesCountShouldReturnAllBooksOrderedBySalesCount(int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.BestsellingBook.SalesCount > 0)
+                .OrderByDescending(x => x.BestsellingBook.SalesCount)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            var bookWithMostSalesId = 3;
+            var secondBookWithMostSalesId = 2;
+            var bookWithMostSalesIdFromTheCollection = service.GetBySalesCount<SingleBookInTableViewModel>(page, itemsPerPage).ToArray()[0].Id;
+            var secondBookWithMostSalesIdFromTheCollection = service.GetBySalesCount<SingleBookInTableViewModel>(page, itemsPerPage).ToArray()[1].Id;
+
+            Assert.Equal(expectedResult, service.GetBySalesCount<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+            Assert.Equal(bookWithMostSalesId, bookWithMostSalesIdFromTheCollection);
+            Assert.Equal(secondBookWithMostSalesId, secondBookWithMostSalesIdFromTheCollection);
+        }
+
+        [Fact]
+        public void GetCountBySalesCountShouldReturnTheBooksCountOfAllTheBooksThatHaveSalesCount()
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.BestsellingBook.SalesCount > 0).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(3, service.GetCountBySalesCount());
+        }
+
         private List<Book> TestData()
         {
             var books = new List<Book>
@@ -365,6 +413,7 @@
                     YearPublished = 1990,
                     AuthorId = 1,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 1),
+                    BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 1),
                 },
                 new Book
                 {
@@ -376,6 +425,7 @@
                     YearPublished = 2000,
                     AuthorId = 2,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 2),
+                    BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 2),
                 },
                 new Book
                 {
@@ -387,6 +437,7 @@
                     YearPublished = 2010,
                     AuthorId = 3,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 3),
+                    BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 3),
                 },
                 new Book
                 {
@@ -398,6 +449,7 @@
                     YearPublished = 1950,
                     AuthorId = 1,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 1),
+                    BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 4),
                 },
             };
 
@@ -472,6 +524,33 @@
                     Id = 4,
                     Name = "Philosophy",
                     IsFiction = false,
+                },
+            };
+        }
+
+        private List<BestsellingBook> TestDataBestsellingBooks()
+        {
+            return new List<BestsellingBook>
+            {
+                new BestsellingBook
+                {
+                    BookId = 1,
+                    SalesCount = 1,
+                },
+                new BestsellingBook
+                {
+                    BookId = 2,
+                    SalesCount = 2,
+                },
+                new BestsellingBook
+                {
+                    BookId = 3,
+                    SalesCount = 3,
+                },
+                new BestsellingBook
+                {
+                    BookId = 4,
+                    SalesCount = 0,
                 },
             };
         }
