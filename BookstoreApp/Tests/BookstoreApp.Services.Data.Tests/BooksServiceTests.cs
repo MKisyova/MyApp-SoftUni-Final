@@ -24,7 +24,15 @@
         [Fact]
         public void GetCountShouldReturnTheTotalBooksCount()
         {
-            BooksService service = this.MockService(this.TestData());
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking()).Returns(this.TestData().AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+                mockRepoBooks.Object,
+                mockRepoGenres.Object,
+                mockRepoBooksGenres.Object);
 
             Assert.Equal(4, service.GetCount());
         }
@@ -399,6 +407,54 @@
             Assert.Equal(3, service.GetCountBySalesCount());
         }
 
+        [Theory]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 3, 3)]
+        [InlineData(1, 4, 4)]
+        public void GetTopRatedShouldReturnAllBooksOrderedByVotes(int page, int itemsPerPage, int expectedResult)
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Votes.Count() > 0)
+                .OrderByDescending(x => x.Votes.Average(v => v.Value))
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            var topRatedBookId = 4;
+            var secondtopRatedBookId = 3;
+            var topRatedBookIdFromTheCollection = service.GetTopRated<SingleBookInTableViewModel>(page, itemsPerPage).ToArray()[0].Id;
+            var secondTopRatedBookIdFromTheCollection = service.GetTopRated<SingleBookInTableViewModel>(page, itemsPerPage).ToArray()[1].Id;
+
+            Assert.Equal(expectedResult, service.GetTopRated<SingleBookInTableViewModel>(page, itemsPerPage).Count());
+            Assert.Equal(topRatedBookId, topRatedBookIdFromTheCollection);
+            Assert.Equal(secondtopRatedBookId, secondTopRatedBookIdFromTheCollection);
+        }
+
+        [Fact]
+        public void GetCountByTopRatedShouldReturnTheBooksCountOfTheBooksThatHaveVotes()
+        {
+            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            mockRepoBooks.Setup(x => x.AllAsNoTracking())
+                .Returns(this.TestData()
+                .Where(x => x.Votes.Count() > 0).AsQueryable);
+            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
+            var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
+
+            var service = new BooksService(
+               mockRepoBooks.Object,
+               mockRepoGenres.Object,
+               mockRepoBooksGenres.Object);
+
+            Assert.Equal(4, service.GetCountByTopRated());
+        }
+
         private List<Book> TestData()
         {
             var books = new List<Book>
@@ -414,6 +470,7 @@
                     AuthorId = 1,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 1),
                     BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 1),
+                    Votes = this.TestDataVotes().Where(x => x.BookId == 1).ToList(),
                 },
                 new Book
                 {
@@ -426,6 +483,7 @@
                     AuthorId = 2,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 2),
                     BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 2),
+                    Votes = this.TestDataVotes().Where(x => x.BookId == 2).ToList(),
                 },
                 new Book
                 {
@@ -438,6 +496,7 @@
                     AuthorId = 3,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 3),
                     BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 3),
+                    Votes = this.TestDataVotes().Where(x => x.BookId == 3).ToList(),
                 },
                 new Book
                 {
@@ -450,6 +509,7 @@
                     AuthorId = 1,
                     Author = this.TestDataAuthors().FirstOrDefault(x => x.Id == 1),
                     BestsellingBook = this.TestDataBestsellingBooks().FirstOrDefault(x => x.BookId == 4),
+                    Votes = this.TestDataVotes().Where(x => x.BookId == 4).ToList(),
                 },
             };
 
@@ -555,10 +615,37 @@
             };
         }
 
-        private BooksService MockService(List<Book> books)
+        private List<Vote> TestDataVotes()
         {
-            var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
-            mockRepoBooks.Setup(x => x.AllAsNoTracking()).Returns(books.AsQueryable);
+            return new List<Vote>
+            {
+                new Vote
+                {
+                    BookId = 1,
+                    Value = 1,
+                },
+                new Vote
+                {
+                    BookId = 2,
+                    Value = 2,
+                },
+                new Vote
+                {
+                    BookId = 3,
+                    Value = 3,
+                },
+                new Vote
+                {
+                    BookId = 4,
+                    Value = 4,
+                },
+            };
+        }
+
+        private BooksService MockService(Mock<IDeletableEntityRepository<Book>> mockRepoBooks)
+        {
+            // var mockRepoBooks = new Mock<IDeletableEntityRepository<Book>>();
+            // mockRepoBooks.Setup(x => x.AllAsNoTracking()).Returns(books.AsQueryable);
             var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
             var mockRepoBooksGenres = new Mock<IRepository<BookGenre>>();
 
