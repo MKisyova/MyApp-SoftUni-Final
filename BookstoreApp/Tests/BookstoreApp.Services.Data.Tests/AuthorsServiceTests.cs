@@ -23,7 +23,9 @@
         [Fact]
         public void GetCountShouldReturnTheTotalAuthorsCount()
         {
-            AuthorsService service = this.MockService(this.TestData());
+            var mockRepoAuthors = new Mock<IDeletableEntityRepository<Author>>();
+            mockRepoAuthors.Setup(x => x.AllAsNoTracking()).Returns(this.TestData().AsQueryable);
+            var service = this.MockService(mockRepoAuthors);
 
             Assert.Equal(4, service.GetCount());
         }
@@ -38,13 +40,7 @@
             mockRepoAuthors.Setup(x => x.AllAsNoTracking())
                 .Returns(this.TestData()
                 .Where(a => a.Id == id).AsQueryable);
-            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
-            var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
-
-            var service = new AuthorsService(
-               mockRepoAuthors.Object,
-               mockRepoGenres.Object,
-               mockRepoAuthorsGenres.Object);
+            var service = this.MockService(mockRepoAuthors);
 
             Assert.Equal(expectedResult, service.GetById<SingleAuthorViewModel>(id).Id);
         }
@@ -59,13 +55,7 @@
             mockRepoAuthors.Setup(x => x.AllAsNoTracking())
                 .Returns(this.TestData()
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage).AsQueryable);
-            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
-            var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
-
-            var service = new AuthorsService(
-               mockRepoAuthors.Object,
-               mockRepoGenres.Object,
-               mockRepoAuthorsGenres.Object);
+            var service = this.MockService(mockRepoAuthors);
 
             Assert.Equal(expectedResult, service.GetAll<SingleAuthorViewModel>(page, itemsPerPage).Count());
         }
@@ -73,7 +63,9 @@
         [Fact]
         public void GetAllAuthorsAsKeyValuePairShouldReturnAllAsKeyValuePair()
         {
-            AuthorsService service = this.MockService(this.TestData());
+            var mockRepoAuthors = new Mock<IDeletableEntityRepository<Author>>();
+            mockRepoAuthors.Setup(x => x.AllAsNoTracking()).Returns(this.TestData().AsQueryable);
+            var service = this.MockService(mockRepoAuthors);
             var expectedResult = this.TestData()
                 .OrderBy(a => a.Name)
                 .Select(a => new KeyValuePair<string, string>(a.Id.ToString(), a.Name));
@@ -104,13 +96,7 @@
                 .Returns(authors.AsQueryable);
             mockRepoAuthors.Setup(x => x.Delete(It.IsAny<Author>()))
                 .Callback((Author author) => authors.Remove(author));
-            var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
-            var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
-
-            var service = new AuthorsService(
-               mockRepoAuthors.Object,
-               mockRepoGenres.Object,
-               mockRepoAuthorsGenres.Object);
+            var service = this.MockService(mockRepoAuthors);
 
             await service.DeleteAsync(authorId);
 
@@ -147,10 +133,8 @@
             };
         }
 
-        private AuthorsService MockService(List<Author> authors)
+        private AuthorsService MockService(Mock<IDeletableEntityRepository<Author>> mockRepoAuthors)
         {
-            var mockRepoAuthors = new Mock<IDeletableEntityRepository<Author>>();
-            mockRepoAuthors.Setup(x => x.AllAsNoTracking()).Returns(authors.AsQueryable);
             var mockRepoGenres = new Mock<IDeletableEntityRepository<Genre>>();
             var mockRepoAuthorsGenres = new Mock<IRepository<AuthorGenre>>();
 
